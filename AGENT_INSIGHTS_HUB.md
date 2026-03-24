@@ -54,7 +54,7 @@ Before using Agent Insights Hub, ensure the following are in place:
 
 3. **Azure App Registration** — An Azure AD app must be registered with access to the Application Insights telemetry data. Follow the setup guide: [Enable Application Insights Support](https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/blob/main/ENABLE-APPINSIGHTS.md#enable-application-insights-support).
 
-4. **Security role assignment** — Users who need to access the application must be assigned the **CSK - Administrator** role.
+4. **Security role assignment** — User must be assigned the **CSK - Administrator** role to access this feature.
    
 5. **App sharing** — The owner of the Copilot Studio Kit code app (or the System Administrator who installed kit) must share the app with other users on their team. Follow these steps:
    1. Go to [make.powerapps.com](https://make.powerapps.com/)
