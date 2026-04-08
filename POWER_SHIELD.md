@@ -43,6 +43,8 @@ This connector is used to read connector actions from the Power Platform Flow AP
 ![PowerShield APIFlow Connector Configuration](./media/ps_prereq_apiflow_connector.png)
 *Figure 2: PowerShield APIFlow connection reference configuration*
 
+<br>
+
 ![PowerShield APIFlow Connection Details](./media/ps_prereq_apiflow_conn.png)
 *Figure 3: HTTP with Microsoft Entra ID connection for APIFlow — Base Resource URL and Entra ID Resource URI settings*
 
@@ -59,6 +61,8 @@ This connector is used to post connector actions and manage DLP policies via the
 
 ![PowerShield BAPAPI Connector Configuration](./media/ps_prereq_bapapi_connector.png)
 *Figure 4: PowerShield BAPAPI connection reference configuration*
+
+<br>
 
 ![PowerShield BAPAPI Connection Details](./media/ps_prereq_bapapi_conn.png)
 *Figure 5: HTTP with Microsoft Entra ID connection for BAPAPI — Base Resource URL and Entra ID Resource URI settings*
@@ -351,6 +355,8 @@ Review your complete request before submission.
 ![Wizard Step 5 - Review](./media/ps_step5_review.png)
 *Figure 16: Wizard Step 5 — request summary showing Service Tree, environments, and connectors*
 
+<br>
+
 ![Submission Confirmation](./media/ps_maker_submission_success.png)
 *Figure 17: Post-submission confirmation — maker home screen with success toast notification*
 
@@ -591,6 +597,8 @@ Blocked connectors cannot be requested by makers in the wizard. They appear dimm
 ![Add Blocked Connector Dialog](./media/ps_blocked_add_filled.png)
 *Figure 23: Add blocked connector dialog — Connector type with search results and block reason*
 
+<br>
+
 ![Add Blocked Publisher Dialog](./media/ps_blocked_add_publisher.png)
 *Figure 24: Add blocked connector dialog — Publisher type showing publisher search results*
 
@@ -636,6 +644,8 @@ Categories are section headers that group questions in the maker's wizard form.
 
 ![Category Detail View](./media/ps_question_category_detail.png)
 *Figure 28: Category Detail view showing inline editable form and questions subgrid*
+
+<br>
 
 ![Category Detail Example](./media/ps_question_dataclass_category.png)
 *Figure 29: Example — "Data Classification" category detail with questions subgrid*
