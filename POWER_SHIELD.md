@@ -3,6 +3,7 @@
 PowerShield enables organizations using the Power Platform to manage connector access through a structured, approval-based workflow for Data Loss Prevention (DLP) policies. It provides a self-service experience for makers to request connector access, and a review interface for administrators to approve, reject, or manage those requests. Every DLP policy change is traceable to a PowerShield request, ensuring governance compliance and auditability.
 
 ![PowerShield Home Screen Overview](./media/ps_admin_home.png)
+
 *Figure 1: PowerShield home screen showing policy request status, stat cards, and request grid*
 
 ## Key concepts
@@ -41,11 +42,13 @@ This connector is used to read connector actions from the Power Platform Flow AP
 | **Entra ID Resource URI** | `https://service.powerapps.com/` |
 
 ![PowerShield APIFlow Connector Configuration](./media/ps_prereq_apiflow_connector.png)
+
 *Figure 2: PowerShield APIFlow connection reference configuration*
 
 <br>
 
 ![PowerShield APIFlow Connection Details](./media/ps_prereq_apiflow_conn.png)
+
 *Figure 3: HTTP with Microsoft Entra ID connection for APIFlow — Base Resource URL and Entra ID Resource URI settings*
 
 #### 2. PowerShield BAPAPI
@@ -60,11 +63,13 @@ This connector is used to post connector actions and manage DLP policies via the
 | **Entra ID Resource URI** | `https://api.bap.microsoft.com` |
 
 ![PowerShield BAPAPI Connector Configuration](./media/ps_prereq_bapapi_connector.png)
+
 *Figure 4: PowerShield BAPAPI connection reference configuration*
 
 <br>
 
 ![PowerShield BAPAPI Connection Details](./media/ps_prereq_bapapi_conn.png)
+
 *Figure 5: HTTP with Microsoft Entra ID connection for BAPAPI — Base Resource URL and Entra ID Resource URI settings*
 
 > **Important**: Both connection references must have active connections created by a user with appropriate Power Platform admin permissions. Without these connections, environment discovery and DLP policy fulfillment will fail.
@@ -204,6 +209,7 @@ Service Trees represent organizational units, departments, or projects in your c
 Navigate to **Service Trees** from the PowerShield navigation to view and manage your Service Trees.
 
 ![Service Tree Management](./media/ps_servicetrees_empty.png)
+
 *Figure 6: Service Tree Management page — empty state before creating service trees*
 
 The page uses a two-level drill-down:
@@ -221,6 +227,7 @@ The page uses a two-level drill-down:
    - **Members** (required): Add at least one additional member by their username (e.g., `user@domain.com`). You are automatically added as the first member and cannot be removed.
 
 ![Create Service Tree Dialog](./media/ps_servicetree_create.png)
+
 *Figure 7: Create Service Tree dialog with name, organization, description, and member picker fields*
 
 > **Note**: Only members of a Service Tree can see it and submit requests under it. The creator is always the first member and cannot be removed.
@@ -230,6 +237,7 @@ The page uses a two-level drill-down:
 Environment Containers group Power Platform environments within a Service Tree. When creating a policy request, you select a container to define which environments the DLP policy applies to.
 
 ![Create Environment Container](./media/ps_servicetree_create_container.png)
+
 *Figure 8: Create Environment Container dialog — enter a name, description, and select environments from the paginated list*
 
 To create a new container:
@@ -252,6 +260,7 @@ To request connector access, click **New Request** on the home screen. The wizar
 Select the Service Tree and Environment Container for your request.
 
 ![Wizard Step 1 - Environment Selection](./media/ps_step1_env_selection.png)
+
 *Figure 9: Wizard Step 1 — selecting a Service Tree (left) and Environment Container (right), with selected container environments shown below*
 
 **Service Tree selection** (left panel):
@@ -287,6 +296,7 @@ Answer the compliance questions configured by your PowerShield Admin. Questions 
 - **Date** picker fields
 
 ![Wizard Step 2 - Questionnaire](./media/ps_step2_questionnaire.png)
+
 *Figure 10: Wizard Step 2 — compliance questionnaire with categorized questions of various types*
 
 Some questions may be conditional — they only appear when a parent question has a specific answer. Required questions are marked with an asterisk (*). Hover over the info (ℹ) icon next to a question for additional context provided by your admin.
@@ -296,6 +306,7 @@ Some questions may be conditional — they only appear when a parent question ha
 Select the connectors you want included in your DLP policy.
 
 ![Wizard Step 3 - Connector Selection](./media/ps_step3_connector_selection.png)
+
 *Figure 11: Wizard Step 3 — connector selection grid with search, filters, and multi-select checkboxes*
 
 **Search and filter controls:**
@@ -315,6 +326,7 @@ Select the connectors you want included in your DLP policy.
 **Blocked connectors**: Connectors blocked by an admin appear dimmed and cannot be selected. These are marked with a "Blocked by Admin" badge.
 
 ![Blocked by Admin Connector](./media/ps_step3_blocked_by_admin.png)
+
 *Figure 12: Connector blocked by admin — dimmed row with "Blocked by Admin" badge, preventing selection*
 
 **Connector Actions dialog:**
@@ -322,6 +334,7 @@ Select the connectors you want included in your DLP policy.
 Click **View Connector Actions** on any connector to see and configure its individual actions.
 
 ![Connector Actions Dialog](./media/ps_step3_connector_actions.png)
+
 *Figure 13: Connector Actions dialog showing action-level Allow/Block toggles with bulk Allow All and Block All controls*
 
 - Each action has a toggle switch: **Allow** (green) or **Block** (red).
@@ -333,6 +346,7 @@ Click **View Connector Actions** on any connector to see and configure its indiv
 Click **Custom Connectors** in the toolbar to define URL patterns for custom connectors.
 
 ![Custom Connector Patterns Dialog](./media/ps_step3_custom_patterns.png)
+
 *Figure 14: Custom Connector Patterns dialog for defining URL patterns with data group classification*
 
 - Add up to 5 custom connector URL patterns per request.
@@ -343,6 +357,7 @@ Click **Custom Connectors** in the toolbar to define URL patterns for custom con
 Provide a business justification for your connector access request.
 
 ![Wizard Step 4 - Justification](./media/ps_step4_justification.png)
+
 *Figure 15: Wizard Step 4 — business justification text area and optional supporting document upload*
 
 - **Justification** (required): Explain why you need these connectors. Minimum 20 characters.
@@ -353,11 +368,13 @@ Provide a business justification for your connector access request.
 Review your complete request before submission.
 
 ![Wizard Step 5 - Review](./media/ps_step5_review.png)
+
 *Figure 16: Wizard Step 5 — request summary showing Service Tree, environments, and connectors*
 
 <br>
 
 ![Submission Confirmation](./media/ps_maker_submission_success.png)
+
 *Figure 17: Post-submission confirmation — maker home screen with success toast notification*
 
 This step displays:
@@ -477,6 +494,7 @@ After a request is submitted, you can exchange messages with admins via the Comm
 The Admin home screen provides a tenant-wide view of all policy requests with management controls.
 
 ![Admin Home Screen](./media/ps_admin_home.png)
+
 *Figure 18: Admin home screen showing 6 stat cards, all-tenant request grid, and admin action buttons*
 
 #### Stat cards
@@ -522,6 +540,7 @@ The admin detail view has four tabs:
 - **Activity** tab: Fulfillment audit log showing DLP policy creation steps and results (admin-only).
 
 ![Fulfillment Tab](./media/ps_admin_fulfillment_tab.png)
+
 *Figure 19: Fulfillment tab showing DLP policy details and per-environment fulfillment status*
 
 #### Assign to Me
@@ -529,6 +548,7 @@ The admin detail view has four tabs:
 When a request is in **Submitted** status, click **Assign to Me** to move it to **Under Review**. This signals to other admins that you are actively reviewing the request.
 
 ![Assign to Me Dialog](./media/ps_admin_assign_request.png)
+
 *Figure 20: Assign to Me confirmation dialog*
 
 #### Approve a request
@@ -545,6 +565,7 @@ When a request is in **Submitted** or **Under Review** status:
 5. Click **Confirm Approve**.
 
 ![Review & Approve Dialog](./media/ps_admin_review_approve.png)
+
 *Figure 21: Review & Approve dialog showing pre-flight check results and approval confirmation*
 
 After approval, PowerShield automatically:
@@ -569,6 +590,7 @@ When a request is in **Submitted** or **Under Review** status:
 Navigate to **Blocked Connectors** from the admin home screen to manage the tenant-level blocked connectors list.
 
 ![Blocked Connectors Screen](./media/ps_blocked_populated.png)
+
 *Figure 22: Blocked Connectors management screen showing the list of blocked connectors with search and add controls*
 
 Blocked connectors cannot be requested by makers in the wizard. They appear dimmed with a "Blocked by Admin" badge.
@@ -595,11 +617,13 @@ Blocked connectors cannot be requested by makers in the wizard. They appear dimm
 6. Click **Save**.
 
 ![Add Blocked Connector Dialog](./media/ps_blocked_add_filled.png)
+
 *Figure 23: Add blocked connector dialog — Connector type with search results and block reason*
 
 <br>
 
 ![Add Blocked Publisher Dialog](./media/ps_blocked_add_publisher.png)
+
 *Figure 24: Add blocked connector dialog — Publisher type showing publisher search results*
 
 > **Note**: Changes to blocked connectors take effect during the next daily connector sync. To expedite, open the connector in the "Connectors" table and update the "Risk Level" field manually.
@@ -611,6 +635,7 @@ Blocked connectors cannot be requested by makers in the wizard. They appear dimm
 Navigate to **Configure Questions** from the admin home screen to manage the compliance questionnaire.
 
 ![Question Configuration - Empty State](./media/ps_question_empty.png)
+
 *Figure 25: Question Configuration screen — empty state on first visit*
 
 The questionnaire configured here appears in **Wizard Step 2** when makers submit connector access requests. Maker responses serve as decision points during the approval process.
@@ -618,6 +643,7 @@ The questionnaire configured here appears in **Wizard Step 2** when makers submi
 > **Note**: The Copilot Studio Kit ships without any question data. When you first open Question Configuration, all grids will be empty. A guided tour and Getting Started Guide help you create your first questionnaire.
 
 ![Question Configuration - Categories Populated](./media/ps_question_categories.png)
+
 *Figure 26: Question Configuration screen with populated categories showing question counts*
 
 #### Hierarchical drill-down
@@ -637,17 +663,20 @@ Categories are section headers that group questions in the maker's wizard form.
 - Click **+ New Category** to create a category with a name, display order, and active status.
 
 ![Create Category Dialog](./media/ps_question_create_category.png)
+
 *Figure 27: Create New Category dialog with name, display order, and active status*
 
 - Click a category name to edit its details inline.
 - Delete a category only if it has no questions (otherwise, delete questions first).
 
 ![Category Detail View](./media/ps_question_category_detail.png)
+
 *Figure 28: Category Detail view showing inline editable form and questions subgrid*
 
 <br>
 
 ![Category Detail Example](./media/ps_question_dataclass_category.png)
+
 *Figure 29: Example — "Data Classification" category detail with questions subgrid*
 
 #### Managing questions
@@ -655,11 +684,13 @@ Categories are section headers that group questions in the maker's wizard form.
 Questions are the individual prompts shown to makers.
 
 ![Question Detail View](./media/ps_question_dataclass_options.png)
+
 *Figure 30: Question Detail view showing inline editable form, configuration fields, and answer options subgrid*
 
 - Click **+ New Question** to create a question within a category.
 
 ![Create New Question Dialog](./media/ps_question_create_question.png)
+
 *Figure 31: Create New Question dialog with answer type, display order, required toggle, and tooltip fields*
 
 - Configure the **Answer Type**: Boolean (Yes/No), Text, Choice (single-select), MultiselectChoice (multi-select), or Date.
@@ -675,6 +706,7 @@ For Choice and MultiselectChoice questions, define the available answer options.
 - Click **+ New Option** to add an option with text, display order, and active status.
 
 ![Create New Option Dialog](./media/ps_question_dataclass_detail.png)
+
 *Figure 32: Create New Option dialog with option text, display order, and active status fields*
 
 - Options appear as dropdown items (Choice) or checkbox items (MultiselectChoice) in the maker's wizard.
@@ -690,6 +722,7 @@ On your first visit, a 3-step guided tour introduces the Question Configuration 
 Navigate to **Notification Settings** via the gear (⚙) icon on the admin home screen.
 
 ![Notification Settings](./media/ps_notification_settings.png)
+
 *Figure 33: Notification Settings screen with email configuration fields*
 
 Configure the following settings to enable email notifications:
