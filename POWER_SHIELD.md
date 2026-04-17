@@ -2,9 +2,9 @@
 
 PowerShield enables organizations using the Power Platform to manage connector access through a structured, approval-based workflow for Data Loss Prevention (DLP) policies. It provides a self-service experience for makers to request connector access, and a review interface for administrators to approve, reject, or manage those requests. Every DLP policy change is traceable to a PowerShield request, ensuring governance compliance and auditability.
 
-![PowerShield Home Screen Overview](./media/ps_admin_home.png)
+![PowerShield Admin Home Screen](./media/ps_admin_home.png)
 
-*Figure 1: PowerShield home screen showing policy request status, stat cards, and request grid*
+*Figure 1: PowerShield Admin home screen showing stat cards, request grid, and settings access*
 
 ## Key concepts
 
@@ -14,7 +14,7 @@ PowerShield enables organizations using the Power Platform to manage connector a
 - **DLP Policy**: A Data Loss Prevention policy created in the Power Platform Admin Center. When an admin approves a request, PowerShield creates a scoped DLP policy that grants the requested connectors to the specified environments.
 - **Connector Actions**: Individual operations within a connector (e.g., "Send Email", "Create Item"). Makers can granularly allow or block specific actions per connector in their request.
 - **Custom Connector Patterns**: URL patterns for custom connectors that can be classified into DLP data groups (Business, Non-business, Blocked).
-- **Compliance Questionnaire**: An optional, admin-configurable set of questions that makers must answer when submitting a request. Admin responses serve as decision points during approval.
+- **Compliance Questionnaire**: An optional, admin-configurable set of questions that makers must answer when submitting a request. Maker responses serve as decision points during approval.
 
 ## Prerequisites
 
@@ -106,7 +106,7 @@ Both flows are designed to run on a **daily schedule** to keep the connector cat
 - **Connector sync** also processes the admin-maintained blocked connectors list (`cat_powershieldblockedconnectors`) — setting `cat_blockedbyadmin = Yes` and `cat_risklevel = Blocked` on matching connector records.
 - **Connector Actions sync** uses the `cat_UpsertConnectorActions` Dataverse Custom API to efficiently create, update, and deactivate action records. Stale actions (removed from the connector by Microsoft) are automatically deactivated.
 
-> **Tip**: If you add a new entry to the Blocked Connectors list and want it to take effect immediately, you can manually trigger the "Sync flow | Connectors" flow instead of waiting for the next scheduled run.
+> **Tip**: If you block a connector through Connector Configurations and want it to take effect immediately, you can manually trigger the "Sync flow | Connectors" flow instead of waiting for the next scheduled run.
 
 ## Roles and responsibilities
 
@@ -133,7 +133,7 @@ A user assigned the **PowerShield Admin** Dataverse security role. Admins are re
 - Assign a request to themselves via **Assign to Me** (set to Under Review).
 - Approve or reject requests (rejection requires a comment).
 - View all request details including documents, questionnaire answers, and fulfillment logs.
-- Manage the blocked connectors list.
+- Manage connector configurations including blocking, risk levels, and action visibility.
 - Configure the compliance questionnaire (categories, questions, answer options).
 - Configure notification delivery settings (sender mailbox, admin distribution list, app URL).
 - Post comments with file attachments on any non-Draft request.
@@ -160,7 +160,17 @@ If a user has both roles, the Admin experience takes priority, though maker acti
 
 ### Home screen (Maker view)
 
-The Maker home screen provides an overview of your connector access requests with quick stats and filtering.
+The Maker home screen provides an overview of your connector access requests with quick stats, filtering, and quick actions.
+
+![Maker Home Screen](./media/ps_maker_home.png)
+
+*Figure 6: Maker home screen showing stat cards, request grid, and header actions*
+
+#### Header actions
+
+The maker header includes two primary buttons:
+- **+ New Request** — launch the 5-step request wizard
+- **Manage Service Trees** — navigate to the Service Tree management page
 
 #### Stat cards
 
@@ -175,12 +185,10 @@ Four stat cards at the top summarize your request portfolio:
 
 Clicking a stat card filters the request grid to show only requests matching that status group.
 
-#### Filtering and search
+#### Search and refresh
 
-- **Search**: Filter requests by request number or service tree name.
-- **Service Tree**: Filter by a specific service tree (dropdown hidden if only one tree exists).
-- **Environment Container**: Filter by a specific environment container (dropdown hidden if only one container exists).
-- **Refresh**: Manually refresh the request list.
+- **Search**: Filter requests by request number or service tree name using the "Search my requests..." search box.
+- **Refresh**: Click the refresh icon to manually refresh the request list.
 
 #### Request grid
 
@@ -188,7 +196,7 @@ The grid displays your requests with the following columns:
 
 | Column | Description |
 |--------|-------------|
-| Request # | Unique request identifier (e.g., REQ-00001004) with row action menu (⋮) |
+| Request # | Unique request identifier (e.g., REQ-00001010) with row action menu (⋮) |
 | Service Tree | The organizational grouping for this request |
 | Env Container | The environment container selected for this request |
 | Status | Current lifecycle status (color-coded badge) |
@@ -198,6 +206,14 @@ The grid displays your requests with the following columns:
 
 Clicking a row navigates to the request detail view. The row action menu (⋮) provides quick access to **Clone** and **Withdraw** actions.
 
+![Maker Clone and Withdraw Menu](./media/ps_maker_clone_withdraw.png)
+
+*Figure 7: Row action menu showing Clone and Withdraw options*
+
+#### Pagination
+
+The grid supports pagination with a configurable "Show N records per page" dropdown and page navigation controls showing total record count.
+
 ---
 
 ### Managing Service Trees
@@ -206,29 +222,29 @@ Service Trees represent organizational units, departments, or projects in your c
 
 #### Service Tree Management page
 
-Navigate to **Service Trees** from the PowerShield navigation to view and manage your Service Trees.
+Navigate to **Manage Service Trees** from the maker home screen header to view and manage your Service Trees. You can also click **Take a tour** in the top-right corner for a guided walkthrough.
 
 ![Service Tree Management](./media/ps_servicetrees_empty.png)
 
-*Figure 6: Service Tree Management page — empty state before creating service trees*
+*Figure 8: Service Tree Management page — empty state with search bar and New Service Tree button*
 
 The page uses a two-level drill-down:
 
-1. **Level 1 — Service Trees list**: View all Service Trees where you are a member. Click a name to drill into its detail view.
-2. **Level 2 — Service Tree detail**: Edit the tree's name, organization, description, and members. Switch to the **Environment Container(s)** tab to manage containers within the tree.
+1. **Level 1 — Service Trees list**: View all Service Trees where you are a member. Use the search bar to filter by name. Click a name to drill into its detail view.
+2. **Level 2 — Service Tree detail**: View and edit the tree's details. Switch between the **Details** tab and the **Environment Containers** tab.
 
 #### Creating a Service Tree
 
 1. Click **+ New Service Tree** on the Service Trees list page or during the wizard (Step 1).
 2. Fill in the required fields:
    - **Name** (required): Display name for the Service Tree
-   - **Organization / BU** (optional): Business unit or organization
+   - **Organization** (optional): Business unit or organization
    - **Description** (optional): Purpose or scope description
-   - **Members** (required): Add at least one additional member by their username (e.g., `user@domain.com`). You are automatically added as the first member and cannot be removed.
+   - **Members**: Add active Dataverse users as members. Paste their username (e.g., `user@domain.com`) and click **+ Add**. You are automatically added as the first member and cannot be removed.
 
 ![Create Service Tree Dialog](./media/ps_servicetree_create.png)
 
-*Figure 7: Create Service Tree dialog with name, organization, description, and member picker fields*
+*Figure 9: Create New Service Tree dialog with name, organization, description, and member picker*
 
 > **Note**: Only members of a Service Tree can see it and submit requests under it. The creator is always the first member and cannot be removed.
 
@@ -236,24 +252,37 @@ The page uses a two-level drill-down:
 
 Environment Containers group Power Platform environments within a Service Tree. When creating a policy request, you select a container to define which environments the DLP policy applies to.
 
-![Create Environment Container](./media/ps_servicetree_create_container.png)
+Navigate to a Service Tree's **Environment Containers** tab to manage containers.
 
-*Figure 8: Create Environment Container dialog — enter a name, description, and select environments from the paginated list*
+![Environment Containers Empty State](./media/ps_servicetree_containers_empty.png)
+
+*Figure 10: Environment Containers tab — empty state with "No containers yet" illustration and create button*
+
+When no containers exist, an illustrated empty state prompts you to **+ Create your first container**. The tab also provides **+ New Container**, a search bar, and a **Refresh** button.
 
 To create a new container:
 
-1. Navigate to a Service Tree's **Environment Container(s)** tab.
+1. Navigate to a Service Tree's **Environment Containers** tab.
 2. Click **+ New Container**.
-3. In the dialog, search and filter available environments from the list.
-4. Select one or more environments using the checkboxes.
-5. Enter a **Container name** (required).
-6. Click **Save**.
+3. In the dialog, fill in the required fields:
+   - **Container name** (required): A display name for the container
+   - **Description** (required): Description of the container's purpose
+4. Search and filter available environments using the display name search, **Type** filter (Production, Sandbox, etc.), and **Location** filter.
+5. Select one or more environments using the checkboxes. An info banner shows the count of selected environments (e.g., "2 environments selected. Selections are preserved across pages").
+6. Use pagination to browse all available environments.
+7. Click **Save**.
+
+![Create Environment Container](./media/ps_servicetree_create_container.png)
+
+*Figure 11: Create Environment Container dialog — name, description, environment filters, and paginated selection list*
+
+> **Note**: Clicking **Cancel** will discard all unsaved changes.
 
 ---
 
 ### Creating a new request (5-step wizard)
 
-To request connector access, click **New Request** on the home screen. The wizard guides you through five steps. If no compliance questionnaire is configured by an admin, Step 2 is automatically skipped and the wizard shows four steps.
+To request connector access, click **+ New Request** on the home screen. The wizard guides you through five steps. If no compliance questionnaire is configured by an admin, Step 2 is automatically skipped and the wizard shows four steps.
 
 #### Step 1: Environment & Service Tree
 
@@ -261,25 +290,27 @@ Select the Service Tree and Environment Container for your request.
 
 ![Wizard Step 1 - Environment Selection](./media/ps_step1_env_selection.png)
 
-*Figure 9: Wizard Step 1 — selecting a Service Tree (left) and Environment Container (right), with selected container environments shown below*
+*Figure 12: Wizard Step 1 — selecting a Service Tree (left) and Environment Container (right), with selected container environments shown below*
 
 **Service Tree selection** (left panel):
 - Browse your available Service Trees in the grid (only trees where you are a member are shown).
-- Use the search box to filter by name or organization.
+- Use the search box to filter by name.
 - Select a tree by clicking its radio button.
-- Click **+ Create New Service Tree** at the bottom to create a new one inline.
+- Click **+ New Service Tree** to create a new one inline.
 
 **Environment Container selection** (right panel):
-- After selecting a Service Tree, its containers appear in the right panel.
-- Select a container by clicking its radio button.
-- Click **+ New Container** to create a new container inline.
-- The environments within the selected container are displayed in a read-only table below.
+- After selecting a Service Tree, its containers appear in the right panel with a count (e.g., "1 container").
+- Select a container by clicking its radio button. The container grid shows **Container name** and **Envs** (environment count badge).
+- Click **Edit** to modify an existing container, or **+ New Container** to create a new one inline.
+- The environments within the selected container are displayed in a read-only table below, showing **Display Name**, **Type** (badge: Sandbox, Production, etc.), and **Location**.
 
 **Validation before proceeding:**
 - A Service Tree must be selected.
 - An Environment Container must be selected.
 - No in-progress conflict (another non-terminal request exists for the same Service Tree).
 - You must have the System Administrator role in each environment within the selected container.
+
+A green "Ready to continue" message appears when all validations pass, noting that your System Administrator role will be verified for each environment.
 
 > **Important**: When you click **Next**, PowerShield validates your System Administrator role in each environment. If you lack the required role in any environment, a dialog will inform you which environments are unauthorized.
 
@@ -289,7 +320,7 @@ Select the Service Tree and Environment Container for your request.
 
 Answer the compliance questions configured by your PowerShield Admin. Questions are grouped by category and may include various types:
 
-- **Yes/No** toggle questions
+- **Yes/No** radio button questions
 - **Text** input fields
 - **Single-select** dropdown choices
 - **Multi-select** checkbox choices
@@ -297,7 +328,7 @@ Answer the compliance questions configured by your PowerShield Admin. Questions 
 
 ![Wizard Step 2 - Questionnaire](./media/ps_step2_questionnaire.png)
 
-*Figure 10: Wizard Step 2 — compliance questionnaire with categorized questions of various types*
+*Figure 13: Wizard Step 2 — compliance questionnaire with categorized questions*
 
 Some questions may be conditional — they only appear when a parent question has a specific answer. Required questions are marked with an asterisk (*). Hover over the info (ℹ) icon next to a question for additional context provided by your admin.
 
@@ -307,27 +338,28 @@ Select the connectors you want included in your DLP policy.
 
 ![Wizard Step 3 - Connector Selection](./media/ps_step3_connector_selection.png)
 
-*Figure 11: Wizard Step 3 — connector selection grid with search, filters, and multi-select checkboxes*
+*Figure 14: Wizard Step 3 — connector selection grid with search, filters, and multi-select checkboxes*
 
 **Search and filter controls:**
-- **Search**: Search by connector name.
+- **Search**: Search connectors by name using the search box.
 - **Publisher**: Filter by connector publisher.
-- **Tier**: Filter by Premium or Standard.
-- **Release**: Filter by Production or Preview.
-- **Risk Level**: Filter by High, Medium, Low, Blocked, or None.
-- Click **Search** or press Enter to apply filters.
+- **Tier**: Filter by Premium or Standard (dropdown).
+- **Release**: Filter by Production or Preview (dropdown).
+- **Risk Level**: Filter by High, Medium, Low, Blocked, or None (dropdown).
+- Click the **search button** (🔍) to apply filters.
+
+**Selected count:** A summary (e.g., "1 selected") is shown below the filter bar.
 
 **Connector grid columns:**
+- Checkbox for selection
 - Connector icon, name, publisher, and badges (Premium, Preview, Blocked by Admin)
-- Risk Level (color-coded badge)
-- Description
-- **View Connector Actions** link — click to configure per-action Allow/Block rules
+- **Risk Level** (color-coded badge: High, Medium, etc.)
+- **Description**
+- **View Connector Actions** link with action count — click to configure per-action Allow/Block rules
 
-**Blocked connectors**: Connectors blocked by an admin appear dimmed and cannot be selected. These are marked with a "Blocked by Admin" badge.
+Each connector row also includes a **View Connector Details** link for additional information.
 
-![Blocked by Admin Connector](./media/ps_step3_blocked_by_admin.png)
-
-*Figure 12: Connector blocked by admin — dimmed row with "Blocked by Admin" badge, preventing selection*
+**Hide Blocked toggle:** Use the **Hide Blocked** toggle to show or hide connectors that have been blocked by an admin. Blocked connectors appear with a red "Blocked by Admin" badge and cannot be selected.
 
 **Connector Actions dialog:**
 
@@ -335,22 +367,42 @@ Click **View Connector Actions** on any connector to see and configure its indiv
 
 ![Connector Actions Dialog](./media/ps_step3_connector_actions.png)
 
-*Figure 13: Connector Actions dialog showing action-level Allow/Block toggles with bulk Allow All and Block All controls*
+*Figure 15: Connector Actions dialog showing action-level Allow/Block toggles*
 
-- Each action has a toggle switch: **Allow** (green) or **Block** (red).
+- A description notes: "All connector actions are allowed by default. Toggle to block specific actions."
 - Use **Allow All** or **Block All** buttons for bulk configuration.
+- Each action displays: **Action Name**, **Action Status** (toggle switch with Allow/Block label and status icon), and **Action Description**.
 - Click **Save** to commit your overrides, or **Cancel** to discard.
 
 **Custom Connector Patterns:**
 
-Click **Custom Connectors** in the toolbar to define URL patterns for custom connectors.
+Click **+ Add Custom Connectors (N)** in the toolbar to define URL patterns for custom connectors. The count in the button reflects the number of patterns already added.
 
 ![Custom Connector Patterns Dialog](./media/ps_step3_custom_patterns.png)
 
-*Figure 14: Custom Connector Patterns dialog for defining URL patterns with data group classification*
+*Figure 16: Custom Connector Patterns dialog for defining URL patterns*
 
-- Add up to 5 custom connector URL patterns per request.
-- Each pattern specifies a host URL pattern (with wildcard `*` support) and a data group (Non-business, Business, or Blocked).
+- A pattern counter (e.g., "1 of 5 patterns") tracks usage against the limit.
+- Click **+ Add Pattern** to add a new row.
+- Each pattern row has an **Order** number, a **Host URL Pattern** input field, and a delete (🗑) icon.
+- A helper text below each input shows: "e.g., http://api.contoso.com — pattern matching with * is supported".
+- Maximum 5 custom connector URL patterns per request.
+- Click **Save** to commit, or **Cancel** to discard.
+
+**Confirm Connector Selections:**
+
+When you click **Next** on the connector step, a **Confirm Connector Selections** dialog appears summarizing your choices before proceeding.
+
+![Confirm Connector Selections](./media/ps_step3_confirm_selections.png)
+
+*Figure 17: Confirm Connector Selections dialog showing selected connectors, blocked actions, and custom patterns*
+
+The dialog displays:
+- **Selected Connectors** (with count) — each connector listed with a checkmark
+- **Blocked Actions** — any action-level blocks, shown as chips per connector (e.g., `scp-get-content-suggestions`)
+- **Custom Connector Patterns** (with count) — each pattern with its data group badge (Business, Non-business, Blocked)
+
+Click **Confirm & Continue** to proceed to the next step, or **Go Back** to make changes.
 
 #### Step 4: Business Justification
 
@@ -358,45 +410,55 @@ Provide a business justification for your connector access request.
 
 ![Wizard Step 4 - Justification](./media/ps_step4_justification.png)
 
-*Figure 15: Wizard Step 4 — business justification text area and optional supporting document upload*
+*Figure 18: Wizard Step 4 — business justification text area and optional supporting document upload*
 
-- **Justification** (required): Explain why you need these connectors. Minimum 20 characters.
-- **Supporting Document** (optional): Attach a single file (PDF, DOCX, XLSX, PNG, or JPG, max 25 MB). You can preview the attached file using the eye icon before submission.
+- **Business justification** (required): Explain why you need these connectors. A character counter (e.g., "35 / 20 minimum characters") tracks progress toward the 20-character minimum.
+- **Supporting Document** (optional): Attach a single file (PDF, DOCX, XLSX, PNG, or JPG, max 25 MB). After attaching, the file name and size (e.g., "260 KB") are displayed with a preview (👁) icon and a remove (×) icon.
 
 #### Step 5: Review & Submit
 
-Review your complete request before submission.
+Review your complete request before submission. This step uses a tabbed layout to organize all request details.
 
 ![Wizard Step 5 - Review](./media/ps_step5_review.png)
 
-*Figure 16: Wizard Step 5 — request summary showing Service Tree, environments, and connectors*
+*Figure 19: Wizard Step 5 — Scope tab showing Service Tree, environments, and connectors*
 
-<br>
+**Service Tree and Environment Container** capsule badges are displayed at the top (clickable for details).
 
-![Submission Confirmation](./media/ps_maker_submission_success.png)
+The review is organized into three tabs:
 
-*Figure 17: Post-submission confirmation — maker home screen with success toast notification*
+**Scope tab:**
+- **Environments** — list of environments with **Check DLP Membership** links (opens Power Platform Admin Center)
+- **Connectors** — selected connectors with expandable action rules (e.g., "2 action rules") and **View Connector Documentation** links
+- **Custom Connector Patterns** (if any) — table showing Order, Host URL Pattern, and Data Group
 
-This step displays:
-1. **Service Tree and Environment Container** capsule badges (clickable for details)
-2. **Environments** — list of environments with links to view their DLP policies in the Admin Center
-3. **Connectors** — selected connectors with expandable blocked actions details
-4. **Custom Connector Patterns** (if any)
-5. **Questionnaire Answers** (collapsible, if questionnaire was completed)
-6. **Justification** text
-7. **Supporting Document** (if attached)
-8. **Co-owner(s)** — add co-owners who will receive read and write access to this request
+**Details tab:**
+- **Questionnaire Answers** (if questionnaire was completed)
+- **Justification** text
+- **Supporting Document** (if attached)
 
-**Adding Co-owners:**
-- Paste a username (e.g., `user@domain.com`) and click **Add**.
-- Co-owners can view request details, post comments, and collaborate on the request.
-- You cannot add yourself or duplicate entries.
-- Maximum 20 co-owners per request.
+**Collaboration tab:**
+
+![Wizard Step 5 - Co-owners](./media/ps_step5_coowners.png)
+
+*Figure 20: Wizard Step 5 — Collaboration tab with co-owner management*
+
+- **Co-owner(s)** — add active Dataverse users as co-owners who will receive read and write access to this request
+- Paste a username (e.g., `user@domain.com`) and click **+ Add**
+- Co-owner cards display the user's name and email, with a remove (×) icon
+- You cannot add yourself or duplicate entries
+- Maximum 20 co-owners per request
 
 **Submitting:**
-- Click **Submit Request** to open a confirmation dialog.
-- Review the summary (Service Tree, environment count, connector count).
-- Click **Submit** to finalize. Once submitted, you cannot edit the request.
+- Click **Submit Request ✓** to open the confirmation dialog.
+
+![Submission Confirmation](./media/ps_step5_submit_confirm.png)
+
+*Figure 21: Confirm Submission dialog showing request summary*
+
+- The dialog reads: "Your request will be sent to administrators for approval. Once submitted, you will not be able to edit it."
+- Displays the **Service Tree**, **Environments** count, and **Connectors** count.
+- Click **Submit ✓** to finalize, or **Cancel** to return.
 
 ---
 
@@ -495,7 +557,7 @@ The Admin home screen provides a tenant-wide view of all policy requests with ma
 
 ![Admin Home Screen](./media/ps_admin_home.png)
 
-*Figure 18: Admin home screen showing 6 stat cards, all-tenant request grid, and admin action buttons*
+*Figure 22: Admin home screen showing 6 stat cards, all-tenant request grid, and settings gear icon*
 
 #### Stat cards
 
@@ -510,22 +572,36 @@ Six stat cards summarize the tenant-wide request portfolio:
 | **Rejected** | Rejected requests |
 | **Withdrawn** | Withdrawn requests |
 
+Clicking a stat card filters the request grid to show only requests matching that status group.
+
 #### Admin-specific controls
 
-The admin header includes:
-- **Configure Questions** button — navigate to the Question Configuration screen
-- **Blocked Connectors** button — navigate to the Blocked Connectors management screen
-- **Settings** (⚙) icon button — navigate to Notification Settings
+The admin header includes a **Settings** (⚙) gear icon in the top-right corner, which navigates to the [Settings Hub](#settings-hub) for centralized access to all admin configuration screens.
+
+#### Search and refresh
+
+- **Search**: Filter requests using the "Search requests..." search box.
+- **Refresh**: Click the refresh icon to manually refresh the request list.
 
 #### Admin grid
 
-The admin grid includes all columns from the maker grid plus a **Created By** column showing the request submitter.
+The admin grid displays all requests across the tenant with the following columns:
 
-#### Notification settings banner
+| Column | Description |
+|--------|-------------|
+| Request # | Unique request identifier with row action menu (⋮) |
+| Service Tree | The organizational grouping for this request |
+| Env Container | The environment container selected for this request |
+| Status | Current lifecycle status (color-coded badge) |
+| Submitted On | Date the request was submitted |
+| Environments | Number of environments in the request |
+| Connectors | Number of connectors requested |
+| Created By | The user who submitted the request |
+| Assigned Admin | The admin assigned to review the request (or "—" if unassigned) |
 
-If required notification settings are not configured, a warning banner appears between the stat cards and the grid:
+#### Pagination
 
-> **Notification settings incomplete.** Email notifications are disabled because the following settings are not configured: {missing list}. **Configure now →**
+The grid supports pagination with a configurable "Show N records per page" dropdown and page navigation controls showing total record count.
 
 ---
 
@@ -538,35 +614,66 @@ The admin detail view has four tabs:
 - **Fulfillment** tab: DLP policy details and per-environment fulfillment status (admin-only).
 - **Comments** tab: Discussion thread where admins can communicate with the maker.
 - **Activity** tab: Fulfillment audit log showing DLP policy creation steps and results (admin-only).
+- **Notifications** tab: Email notification history for this request (admin-only).
+
+The request header shows the request number, status badge, submitted date, decided date (after approval/rejection), and assigned admin name.
+
+#### Fulfillment tab
+
+After a request is approved and DLP policy creation completes, the Fulfillment tab shows the policy details and per-environment status.
 
 ![Fulfillment Tab](./media/ps_admin_fulfillment_tab.png)
 
-*Figure 19: Fulfillment tab showing DLP policy details and per-environment fulfillment status*
+*Figure 23: Fulfillment tab showing DLP Policy details and per-environment fulfillment status*
+
+**DLP Policy section:**
+- **Service Tree** — name of the associated Service Tree
+- **Request** — clickable request number link
+- **Policy Name** — full DLP policy name with a copy (📋) button
+- **Policy ID** — GUID of the created policy with a copy (📋) button
+
+**Fulfillment status:**
+- A summary banner shows the overall result (e.g., "All environments fulfilled — 2 of 2 environments fulfilled successfully")
+- The **Fulfillment Status** table shows each environment with its **Status** (Succeeded badge), **Error** (or "—"), and **Fulfilled On** date
 
 #### Assign to Me
 
-When a request is in **Submitted** status, click **Assign to Me** to move it to **Under Review**. This signals to other admins that you are actively reviewing the request.
+When a request is in **Submitted** status, click **Assign to Me** (with info icon ℹ) to move it to **Under Review**. This signals to other admins that you are actively reviewing the request.
 
-![Assign to Me Dialog](./media/ps_admin_assign_request.png)
+![Assign Request Dialog](./media/ps_admin_assign_request.png)
 
-*Figure 20: Assign to Me confirmation dialog*
+*Figure 24: Assign Request confirmation dialog*
+
+The dialog reads: "You are about to assign yourself as the reviewing administrator for this request. The request status will change to **Under Review**, and you will be responsible for reviewing and making a decision on it."
+
+Click **Confirm** to proceed, or **Cancel** to dismiss.
 
 #### Approve a request
 
-When a request is in **Submitted** or **Under Review** status:
+When a request is in **Submitted** or **Under Review** status, the approval flow uses a **2-step wizard**:
 
-1. Click **Approve**.
-2. A pre-flight dialog shows the impact on existing DLP policies:
-   - If no existing policies are affected, a success message is displayed.
+**Step 1 — Review (DLP Policy Impact):**
+
+1. Click **Approve** in the request header.
+2. A dialog shows the **DLP Policy Impact** pre-flight check:
+   - If no existing policies are affected, a green success message is displayed (e.g., "No existing DLP policies will be affected. A new policy will be created covering N environment(s) with N approved connector(s).").
    - If existing policies will be modified, a warning lists the affected policies and environments to be reassigned.
    - If approving would leave an existing policy with zero environments, approval is **blocked** until the admin resolves the conflict in the Power Platform Admin Center.
-3. Add an optional approval comment.
-4. Acknowledge any policy impact (if applicable).
-5. Click **Confirm Approve**.
+3. Click **Next →** to proceed to Step 2, or **Cancel** to dismiss.
 
-![Review & Approve Dialog](./media/ps_admin_review_approve.png)
+![Review & Approve Dialog - Step 1](./media/ps_admin_review_approve.png)
 
-*Figure 21: Review & Approve dialog showing pre-flight check results and approval confirmation*
+*Figure 25: Approval Step 1 — DLP Policy Impact review showing pre-flight check results*
+
+**Step 2 — Approve (Confirmation):**
+
+![Review & Approve Dialog - Step 2](./media/ps_admin_approve_confirm.png)
+
+*Figure 26: Approval Step 2 — confirmation with required admin comment*
+
+4. A warning banner explains: "By clicking **Confirm Approve**, you are authorizing the creation of a DLP policy that will take effect immediately across the specified environments. This action cannot be undone from within PowerShield and will require manual intervention in the Power Platform Admin Center to reverse."
+5. Enter an **Admin comment** (required) — provide the rationale for approval.
+6. Click **Confirm Approve** to finalize, **← Back** to return to Step 1, or **Cancel** to dismiss.
 
 After approval, PowerShield automatically:
 1. Sets the request status to **Implementing**.
@@ -585,114 +692,112 @@ When a request is in **Submitted** or **Under Review** status:
 
 ---
 
-### Blocked Connectors management
+### Settings Hub
 
-Navigate to **Blocked Connectors** from the admin home screen to manage the tenant-level blocked connectors list.
+Navigate to the **Settings Hub** by clicking the gear (⚙) icon on the admin home screen.
 
-![Blocked Connectors Screen](./media/ps_blocked_populated.png)
+![Settings Hub](./media/ps_admin_settings_hub.png)
 
-*Figure 22: Blocked Connectors management screen showing the list of blocked connectors with search and add controls*
+*Figure 27: Settings Hub — centralized navigation to all admin configuration screens*
 
-Blocked connectors cannot be requested by makers in the wizard. They appear dimmed with a "Blocked by Admin" badge.
+The Settings Hub provides a centralized entry point for all PowerShield administration settings under the heading **PowerShield Administration** — "Configure connectors, questionnaires, and notification delivery for your organization."
 
-#### Grid columns
+Three navigation cards are available:
+
+| Card | Description | Badge |
+|------|-------------|-------|
+| **Connector Configurations** | Manage connector catalog, risk levels, and visibility | — |
+| **Question Configurations** | Configure the questionnaire makers complete when requesting access | Category/question count (e.g., "3 categories · 1 question") |
+| **Notification Settings** | Configure email notification delivery for policy requests | Status badge (e.g., "Enabled") |
+
+Click any card to navigate to the corresponding configuration screen.
+
+---
+
+### Connector Configurations
+
+Navigate to **Connector Configurations** from the Settings Hub to browse and manage all connectors synced from your Power Platform environment.
+
+![Connector Configurations](./media/ps_admin_configure_connectors.png)
+
+*Figure 28: Connector Configurations screen showing the full connector catalog with risk levels, blocked status, and documentation links*
+
+**Toolbar actions:**
+- **View details and actions** — open a detail panel for the selected connector
+- **Block** — block the selected connector(s) for all makers
+- **Unblock** — remove the block from the selected connector(s)
+- **Set risk** — assign a risk level (High, Medium, Low, None) to the selected connector(s)
+- **Show blocked** toggle — show or hide blocked connectors in the grid
+- **Search** — search by name or publisher
+
+**Connector grid columns:**
 
 | Column | Description |
 |--------|-------------|
-| Name | Display name of the blocked connector or publisher |
-| Connector Key | Internal connector identifier (blank for publisher-blocked entries) |
-| Publisher Name | Publisher name (blank for connector-key-blocked entries) |
-| Block Reason | Admin-provided reason for blocking |
-| Is Non-Blockable | Whether the block can be overridden (reserved for future use) |
-| Last Synced On | Timestamp of last sync that processed this record |
-| Created On | Record creation timestamp |
+| Name | Connector display name with icon |
+| Published By | Connector publisher |
+| Actions | Number of available actions (clickable link) |
+| Risk Level | Admin-assigned risk level badge (High, Medium, Low, or —) |
+| Blocked | Blocked status badge (red "Blocked" or —) |
+| Documentation | "Learn more" link to the connector's official documentation |
 
-#### Adding a blocked connector
+**Connector detail panel:**
 
-1. Click **+ Add** in the toolbar.
-2. Select a **Block Type**: Connector (block a specific connector) or Publisher (block all connectors from a publisher).
-3. Type at least 3 characters and click **Search** to find the connector or publisher.
-4. Select from the search results. Already-blocked items appear disabled with an "Already blocked" badge.
-5. Enter a **Block Reason** (required).
-6. Click **Save**.
+Click a connector row (or select it and click **View details and actions**) to open a detail panel on the right side showing:
 
-![Add Blocked Connector Dialog](./media/ps_blocked_add_filled.png)
+![Connector Detail Panel](./media/ps_admin_configure_connectors_actions.png)
 
-*Figure 23: Add blocked connector dialog — Connector type with search results and block reason*
+*Figure 29: Connector detail panel showing metadata and Connector Actions subgrid*
 
-<br>
+- **Connector Key** — internal connector identifier
+- **Category** — Standard or Premium
+- **Release Tag** — Production or Preview
+- **Last Sync Date Time** — timestamp of the most recent sync
+- **Created On** — record creation date
+- **Description** — connector description
 
-![Add Blocked Publisher Dialog](./media/ps_blocked_add_publisher.png)
+**Connector Actions subgrid** within the detail panel:
+- Search actions by name
+- **Block** and **Unblock** buttons for selected actions
+- Refresh button
+- Grid columns: **Name**, **Description**, **Status** (Allow/Block badge)
 
-*Figure 24: Add blocked connector dialog — Publisher type showing publisher search results*
-
-> **Note**: Changes to blocked connectors take effect during the next daily connector sync. To expedite, open the connector in the "Connectors" table and update the "Risk Level" field manually.
+> **Note**: Changes to connector blocking take effect during the next daily connector sync. To expedite, manually trigger the "Sync flow | Connectors" flow.
 
 ---
 
 ### Question Configuration
 
-Navigate to **Configure Questions** from the admin home screen to manage the compliance questionnaire.
+Navigate to **Question Configurations** from the Settings Hub to manage the compliance questionnaire.
 
-![Question Configuration - Empty State](./media/ps_question_empty.png)
+![Question Configuration](./media/ps_admin_settings_questions.png)
 
-*Figure 25: Question Configuration screen — empty state on first visit*
+*Figure 30: Question Configuration screen with Getting Started guide, categories and questions tabs*
 
 The questionnaire configured here appears in **Wizard Step 2** when makers submit connector access requests. Maker responses serve as decision points during the approval process.
 
-> **Note**: The Copilot Studio Kit ships without any question data. When you first open Question Configuration, all grids will be empty. A guided tour and Getting Started Guide help you create your first questionnaire.
+**Getting Started guide:** An expandable "Getting Started with Question Configuration" section provides guidance on first setup. Click **Expand** to view the full guide.
 
-![Question Configuration - Categories Populated](./media/ps_question_categories.png)
+**Two tabs organize the content:**
+- **Categories** tab — manage category groupings (section headers in the maker's wizard)
+- **Questions** tab — manage individual questions across all categories
 
-*Figure 26: Question Configuration screen with populated categories showing question counts*
-
-#### Hierarchical drill-down
-
-The screen uses a 3-level drill-down:
-
-1. **Categories List** → click a category name to drill into its detail
-2. **Category Detail** → edit the category and manage its questions
-3. **Question Detail** → edit the question and manage its answer options
-
-Breadcrumb navigation (e.g., `Categories › Guest Access › Will guests need access...`) lets you navigate back to any level.
+> **Note**: The Copilot Studio Kit ships without any question data. When you first open Question Configuration, all grids will be empty. Click **Take a tour** in the top-right corner for a guided walkthrough.
 
 #### Managing categories
 
 Categories are section headers that group questions in the maker's wizard form.
 
 - Click **+ New Category** to create a category with a name, display order, and active status.
-
-![Create Category Dialog](./media/ps_question_create_category.png)
-
-*Figure 27: Create New Category dialog with name, display order, and active status*
-
-- Click a category name to edit its details inline.
-- Delete a category only if it has no questions (otherwise, delete questions first).
-
-![Category Detail View](./media/ps_question_category_detail.png)
-
-*Figure 28: Category Detail view showing inline editable form and questions subgrid*
-
-<br>
-
-![Category Detail Example](./media/ps_question_dataclass_category.png)
-
-*Figure 29: Example — "Data Classification" category detail with questions subgrid*
+- The categories grid shows: **Name** (clickable link), **Questions** (count badge), **Display Order**, **Is Active**, and a delete (🗑) icon.
+- Click a category name to drill into its detail and manage questions within that category.
+- Delete a category using the delete icon (only available if it has no questions).
 
 #### Managing questions
 
 Questions are the individual prompts shown to makers.
 
-![Question Detail View](./media/ps_question_dataclass_options.png)
-
-*Figure 30: Question Detail view showing inline editable form, configuration fields, and answer options subgrid*
-
 - Click **+ New Question** to create a question within a category.
-
-![Create New Question Dialog](./media/ps_question_create_question.png)
-
-*Figure 31: Create New Question dialog with answer type, display order, required toggle, and tooltip fields*
-
 - Configure the **Answer Type**: Boolean (Yes/No), Text, Choice (single-select), MultiselectChoice (multi-select), or Date.
 - Set **Display Order** to control the position within its category.
 - Mark as **Required** to make the answer mandatory for makers.
@@ -704,35 +809,34 @@ Questions are the individual prompts shown to makers.
 For Choice and MultiselectChoice questions, define the available answer options.
 
 - Click **+ New Option** to add an option with text, display order, and active status.
-
-![Create New Option Dialog](./media/ps_question_dataclass_detail.png)
-
-*Figure 32: Create New Option dialog with option text, display order, and active status fields*
-
 - Options appear as dropdown items (Choice) or checkbox items (MultiselectChoice) in the maker's wizard.
 
 #### Guided tour
 
-On your first visit, a 3-step guided tour introduces the Question Configuration interface. You can re-trigger it at any time by clicking **Take a tour** in the page header.
+On your first visit, a guided tour introduces the Question Configuration interface. You can re-trigger it at any time by clicking **Take a tour** in the page header.
 
 ---
 
 ### Notification Settings
 
-Navigate to **Notification Settings** via the gear (⚙) icon on the admin home screen.
+Navigate to **Notification Settings** from the Settings Hub to configure email notification delivery.
 
 ![Notification Settings](./media/ps_notification_settings.png)
 
-*Figure 33: Notification Settings screen with email configuration fields*
+*Figure 31: Notification Settings screen with email configuration fields and helper text*
+
+> **Note**: Server-side synchronization must be enabled for the sender mailbox in Exchange Online.
 
 Configure the following settings to enable email notifications:
 
 | Setting | Description | Required |
 |---------|-------------|----------|
-| **Sender Email Address** | The email address used to send notification emails | Yes |
-| **Admin Distribution List** | Email distribution list for admin notifications | No |
-| **PowerShield App URL** | Direct URL to the PowerShield app (used in email links) | No |
-| **Notifications Enabled** | Master toggle to enable/disable all notifications | — |
+| **Sender Email Address** | Email address of a queue or user with server-side sync enabled | Yes |
+| **Admin Distribution List** | Distribution list or shared mailbox for admin notifications | No |
+| **PowerShield App URL** | Copy the complete URL from your browser's address bar and paste it here (used for deep links in notification emails) | No |
+| **Notifications Enabled** | Checkbox to enable or disable all email notifications | — |
+
+Click **Save** to apply changes, or **Cancel** to discard.
 
 > **Important**: Without the Sender Email Address configured, all email notifications will silently fail. The admin home screen displays a warning banner if required settings are missing.
 
@@ -840,7 +944,7 @@ A: This status indicates that the DLP policy creation or modification encountere
 
 **Q: How do I know which connectors are blocked?**
 
-A: Blocked connectors appear dimmed in the connector selection grid (Step 3) with a "Blocked by Admin" badge. They cannot be selected. Contact your PowerShield Admin for more information on why a connector is blocked.
+A: Blocked connectors appear dimmed in the connector selection grid (Step 3) with a "Blocked by Admin" badge. They cannot be selected. Use the **Hide Blocked** toggle to show or hide them. Contact your PowerShield Admin for more information on why a connector is blocked.
 
 **Q: Can I request access for a Developer environment?**
 
@@ -862,19 +966,19 @@ A: When you click Next on Step 1, PowerShield verifies that you have the System 
 
 **Q: How do I configure the compliance questionnaire?**
 
-A: Navigate to **Configure Questions** from the admin home screen. Create categories (section headers), then add questions within each category. Configure answer types, conditional logic, and answer options. The questionnaire automatically appears in Step 2 of the maker's request wizard.
+A: Navigate to the **Settings Hub** (gear icon) → **Question Configurations**. Create categories (section headers), then add questions within each category. Configure answer types, conditional logic, and answer options. The questionnaire automatically appears in Step 2 of the maker's request wizard.
 
 **Q: What happens if I approve a request that conflicts with existing DLP policies?**
 
-A: The pre-flight dialog shows you which existing policies will be affected and which environments will be reassigned. If approving would leave an existing policy with zero environments, approval is blocked until you resolve the conflict in the Power Platform Admin Center. PowerShield handles conflict resolution automatically for non-blocking scenarios.
+A: The pre-flight dialog (Step 1 of the approval wizard) shows you which existing policies will be affected and which environments will be reassigned. If approving would leave an existing policy with zero environments, approval is blocked until you resolve the conflict in the Power Platform Admin Center. PowerShield handles conflict resolution automatically for non-blocking scenarios.
 
 **Q: How do I block a connector tenant-wide?**
 
-A: Navigate to **Blocked Connectors** from the admin home screen. Click **+ Add** and search for the connector or publisher you want to block. Provide a reason and save. The block takes effect during the next connector sync cycle.
+A: Navigate to the **Settings Hub** (gear icon) → **Connector Configurations**. Select the connector(s) you want to block and click **Block** in the toolbar. Provide a reason and save. The block takes effect during the next connector sync cycle.
 
 **Q: Why are email notifications not being sent?**
 
-A: Check the **Notification Settings** (gear icon on the home screen). Ensure the **Sender Email Address** is configured and **Notifications Enabled** is checked. The admin home screen shows a warning banner if required settings are missing.
+A: Navigate to the **Settings Hub** (gear icon) → **Notification Settings**. Ensure the **Sender Email Address** is configured and **Notifications Enabled** is checked. Also verify that server-side synchronization is enabled for the sender mailbox in Exchange Online.
 
 ### Troubleshooting
 
@@ -896,7 +1000,7 @@ A: Check the **Notification Settings** (gear icon on the home screen). Ensure th
 - Ensure the approving admin has Power Platform Admin permissions.
 - If the fulfillment failed, the status may transition to **Policy Failed** — review the error details and retry.
 
-**Issue: Cannot see the "Configure Questions" or "Blocked Connectors" buttons**
+**Issue: Cannot see the Settings Hub or admin configuration screens**
 
 - These features are only available to users with the **PowerShield Admin** security role. Contact your Dataverse administrator to verify your role assignment.
 
