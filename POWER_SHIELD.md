@@ -15,6 +15,7 @@ PowerShield enables organizations using the Power Platform to manage connector a
 - **Connector Actions**: Individual operations within a connector (e.g., "Send Email", "Create Item"). Makers can granularly allow or block specific actions per connector in their request.
 - **Custom Connector Patterns**: URL patterns for custom connectors that can be classified into DLP data groups (Business, Non-business, Blocked).
 - **Compliance Questionnaire**: An optional, admin-configurable set of questions that makers must answer when submitting a request. Maker responses serve as decision points during approval.
+- **Connector Governance (Default-Blocked Model)**: By default, all non-Microsoft-published connectors are blocked after the initial connector sync. Only connectors published by Microsoft are available to makers out of the box. Admins selectively unblock connectors they want to make available through the Connector Configurations screen. This ensures a secure-by-default posture where makers can only request access to explicitly approved connectors.
 
 ## Prerequisites
 
@@ -82,7 +83,7 @@ Two scheduled cloud flows are responsible for populating and keeping these table
 
 | Cloud Flow | Purpose | What It Populates |
 |------------|---------|-------------------|
-| **Sync flow \| Connectors** | Discovers all available connectors in the tenant and syncs them into Dataverse. Also applies blocked connector risk levels and deactivates stale connectors. | `cat_connector` table — one row per connector with display name, publisher, tier (Premium/Standard), risk level, icon URL, connector key, and active status |
+| **Sync flow \| Connectors** | Discovers all available connectors in the tenant and syncs them into Dataverse. New non-Microsoft-published connectors are blocked by default (`Blocked by Admin = Yes`); Microsoft-published connectors are unblocked by default. Admin overrides are preserved on subsequent syncs. | `cat_connector` table — one row per connector with display name, publisher, tier (Premium/Standard), risk level, icon URL, connector key, blocked status, and active status |
 | **Sync flow \| Connector Actions** | For each active connector, fetches the available actions (operations) from the Power Platform Flow API and syncs them into Dataverse. | `cat_connectoraction` table — one row per action with action name, action key, description, status (Allow/Block), and parent connector reference |
 
 #### First-time setup
@@ -101,12 +102,12 @@ After installing the PowerShield solution:
 
 #### Ongoing sync
 
-Both flows are designed to run on a **daily schedule** to keep the connector catalog current. New connectors added to the Power Platform, connector action changes, and blocked connector risk levels are automatically synced during each run.
+Both flows are designed to run on a **daily schedule** to keep the connector catalog current. New connectors added to the Power Platform and connector action changes are automatically synced during each run.
 
-- **Connector sync** also processes the admin-maintained blocked connectors list (`cat_powershieldblockedconnectors`) — setting `cat_blockedbyadmin = Yes` and `cat_risklevel = Blocked` on matching connector records.
+- **Connector sync** applies the **default-blocked model**: newly discovered non-Microsoft-published connectors are automatically set to `Blocked by Admin = Yes`. Microsoft-published connectors default to unblocked. Any admin overrides (block/unblock via Connector Configurations) are preserved and never overwritten by subsequent syncs.
 - **Connector Actions sync** uses the `cat_UpsertConnectorActions` Dataverse Custom API to efficiently create, update, and deactivate action records. Stale actions (removed from the connector by Microsoft) are automatically deactivated.
 
-> **Tip**: If you block a connector through Connector Configurations and want it to take effect immediately, you can manually trigger the "Sync flow | Connectors" flow instead of waiting for the next scheduled run.
+> **Note**: Blocking or unblocking a connector through the **Connector Configurations** screen takes effect **immediately** — no sync is required. The daily sync only applies default blocking to newly discovered connectors.
 
 ## Roles and responsibilities
 
@@ -133,7 +134,7 @@ A user assigned the **PowerShield Admin** Dataverse security role. Admins are re
 - Assign a request to themselves via **Assign to Me** (set to Under Review).
 - Approve or reject requests (rejection requires a comment).
 - View all request details including documents, questionnaire answers, and fulfillment logs.
-- Manage connector configurations including blocking, risk levels, and action visibility.
+- Manage connector configurations — selectively unblock connectors for maker use, assign risk levels, and configure action visibility.
 - Configure the compliance questionnaire (categories, questions, answer options).
 - Configure notification delivery settings (sender mailbox, admin distribution list, app URL).
 - Post comments with file attachments on any non-Draft request.
@@ -359,7 +360,7 @@ Select the connectors you want included in your DLP policy.
 
 Each connector row also includes a **View Connector Details** link for additional information.
 
-**Hide Blocked toggle:** Use the **Hide Blocked** toggle to show or hide connectors that have been blocked by an admin. Blocked connectors appear with a red "Blocked by Admin" badge and cannot be selected.
+**Hide Blocked toggle:** Use the **Hide Blocked** toggle to show or hide connectors that are blocked. By default, all non-Microsoft-published connectors are blocked until an admin explicitly unblocks them through Connector Configurations. Blocked connectors appear with a red "Blocked by Admin" badge and cannot be selected. Only connectors that have been unblocked by an admin (or Microsoft-published connectors, which are unblocked by default) are available for selection.
 
 **Connector Actions dialog:**
 
@@ -659,6 +660,7 @@ When a request is in **Submitted** or **Under Review** status, the approval flow
    - If no existing policies are affected, a green success message is displayed (e.g., "No existing DLP policies will be affected. A new policy will be created covering N environment(s) with N approved connector(s).").
    - If existing policies will be modified, a warning lists the affected policies and environments to be reassigned.
    - If approving would leave an existing policy with zero environments, approval is **blocked** until the admin resolves the conflict in the Power Platform Admin Center.
+   - If any requested connectors were **blocked by an admin after the maker submitted** the request, a warning highlights these connectors. The admin can choose to proceed (the blocked connectors will be excluded from the DLP policy) or go back.
 3. Click **Next →** to proceed to Step 2, or **Cancel** to dismiss.
 
 ![Review & Approve Dialog - Step 1](./media/ps_admin_review_approve.png)
@@ -718,16 +720,18 @@ Click any card to navigate to the corresponding configuration screen.
 
 Navigate to **Connector Configurations** from the Settings Hub to browse and manage all connectors synced from your Power Platform environment.
 
+> **Important — Default-Blocked Model**: After the initial connector sync, all non-Microsoft-published connectors are **blocked by default**. Only Microsoft-published connectors are available to makers out of the box. Use this screen to selectively **unblock** the connectors your organization wants to make available for maker requests. Blocking or unblocking a connector takes effect **immediately** — no sync is required.
+
 ![Connector Configurations](./media/ps_admin_configure_connectors.png)
 
-*Figure 28: Connector Configurations screen showing the full connector catalog with risk levels, blocked status, and documentation links*
+*Figure 28: Connector Configurations screen showing the full connector catalog with blocked status, risk levels, and documentation links*
 
 **Toolbar actions:**
 - **View details and actions** — open a detail panel for the selected connector
-- **Block** — block the selected connector(s) for all makers
-- **Unblock** — remove the block from the selected connector(s)
+- **Block** — block the selected connector(s), preventing makers from requesting them
+- **Unblock** — unblock the selected connector(s), making them available for maker requests
 - **Set risk** — assign a risk level (High, Medium, Low, None) to the selected connector(s)
-- **Show blocked** toggle — show or hide blocked connectors in the grid
+- **Show blocked** toggle — when ON, shows all connectors including blocked ones; when OFF, hides blocked connectors to focus on available ones
 - **Search** — search by name or publisher
 
 **Connector grid columns:**
@@ -738,7 +742,7 @@ Navigate to **Connector Configurations** from the Settings Hub to browse and man
 | Published By | Connector publisher |
 | Actions | Number of available actions (clickable link) |
 | Risk Level | Admin-assigned risk level badge (High, Medium, Low, or —) |
-| Blocked | Blocked status badge (red "Blocked" or —) |
+| Blocked | Blocked status badge (red "Blocked" or —). Non-Microsoft connectors show "Blocked" by default until explicitly unblocked |
 | Documentation | "Learn more" link to the connector's official documentation |
 
 **Connector detail panel:**
@@ -762,7 +766,7 @@ Click a connector row (or select it and click **View details and actions**) to o
 - Refresh button
 - Grid columns: **Name**, **Description**, **Status** (Allow/Block badge)
 
-> **Note**: Changes to connector blocking take effect during the next daily connector sync. To expedite, manually trigger the "Sync flow | Connectors" flow.
+> **Note**: All blocking and unblocking changes (both at the connector level and individual action level) take effect **immediately**. No sync is required.
 
 ---
 
@@ -895,9 +899,8 @@ PowerShield uses the following key Dataverse tables. All tables use the `cat_` p
 | Table | Purpose |
 |-------|---------|
 | `cat_servicetree` | Maker-defined organizational groupings for scoping requests |
-| `cat_connector` | Connector catalog (maintained by sync flow) |
+| `cat_connector` | Connector catalog (maintained by sync flow); non-Microsoft connectors blocked by default |
 | `cat_connectoraction` | Individual actions per connector (maintained by sync flow) |
-| `cat_powershieldblockedconnectors` | Admin-maintained blocked connectors list |
 | `cat_questioncategory` | Admin-configurable questionnaire section headers |
 | `cat_question` | Admin-configurable compliance questions |
 | `cat_questionoption` | Answer options for Choice/MultiselectChoice questions |
@@ -944,7 +947,11 @@ A: This status indicates that the DLP policy creation or modification encountere
 
 **Q: How do I know which connectors are blocked?**
 
-A: Blocked connectors appear dimmed in the connector selection grid (Step 3) with a "Blocked by Admin" badge. They cannot be selected. Use the **Hide Blocked** toggle to show or hide them. Contact your PowerShield Admin for more information on why a connector is blocked.
+A: By default, all non-Microsoft-published connectors are blocked. In the connector selection grid (Step 3), blocked connectors appear with a red "Blocked by Admin" badge and cannot be selected. Use the **Hide Blocked** toggle to show or hide them. Your PowerShield Admin can unblock connectors through the Connector Configurations screen.
+
+**Q: Why do I only see Microsoft connectors available for selection?**
+
+A: PowerShield uses a secure-by-default model where all non-Microsoft-published connectors are blocked until an admin explicitly unblocks them. Contact your PowerShield Admin to request that specific connectors be unblocked through the Connector Configurations screen.
 
 **Q: Can I request access for a Developer environment?**
 
@@ -972,9 +979,13 @@ A: Navigate to the **Settings Hub** (gear icon) → **Question Configurations**.
 
 A: The pre-flight dialog (Step 1 of the approval wizard) shows you which existing policies will be affected and which environments will be reassigned. If approving would leave an existing policy with zero environments, approval is blocked until you resolve the conflict in the Power Platform Admin Center. PowerShield handles conflict resolution automatically for non-blocking scenarios.
 
-**Q: How do I block a connector tenant-wide?**
+**Q: How do I unblock a connector for makers?**
 
-A: Navigate to the **Settings Hub** (gear icon) → **Connector Configurations**. Select the connector(s) you want to block and click **Block** in the toolbar. Provide a reason and save. The block takes effect during the next connector sync cycle.
+A: Navigate to the **Settings Hub** (gear icon) → **Connector Configurations**. Use the **Show blocked** toggle to see all connectors, select the connector(s) you want to unblock, and click **Unblock** in the toolbar. The change takes effect immediately — no sync is required.
+
+**Q: How do I block a connector?**
+
+A: Navigate to the **Settings Hub** (gear icon) → **Connector Configurations**. Select the connector(s) and click **Block** in the toolbar. The change takes effect immediately. Note that all non-Microsoft-published connectors are already blocked by default after the initial sync — you typically only need to block a connector if it was previously unblocked.
 
 **Q: Why are email notifications not being sent?**
 
@@ -1007,3 +1018,8 @@ A: Navigate to the **Settings Hub** (gear icon) → **Notification Settings**. E
 **Issue: Connector icons not loading**
 
 - Connector icons are loaded from external URLs. The Power Apps Content Security Policy may block some external image sources. A fallback plug icon is displayed when the original icon cannot load. This does not affect functionality.
+
+**Issue: No connectors available for selection in wizard Step 3**
+
+- By default, all non-Microsoft-published connectors are blocked. If makers only see Microsoft connectors (or none at all), your PowerShield Admin needs to unblock the relevant connectors through **Settings Hub** → **Connector Configurations**.
+- Ensure the "Sync flow | Connectors" has run successfully at least once to populate the connector catalog.
