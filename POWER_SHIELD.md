@@ -23,9 +23,9 @@ Before using PowerShield, ensure you have:
 
 - **Copilot Studio Kit prerequisites**: All [prerequisites for the Copilot Studio Kit](PREREQUISITES.md) must be installed and configured.
 - **Security roles**: Users must be assigned one of the following Dataverse security roles in the environment where the Copilot Studio Kit is hosted:
-  - **PowerShield Maker** — for submitting and managing connector access requests
+  - **PowerShield Maker** or **System Administrator** — for submitting and managing connector access requests (either role grants maker access)
   - **PowerShield Admin** — for reviewing, approving, and configuring PowerShield
-- **System Administrator role**: Makers must have the System Administrator security role in each Power Platform environment they include in their request. This is validated during the wizard flow.
+- **System Administrator role in target environments**: Makers must have the System Administrator security role in each Power Platform environment they include in their request. This is validated during the wizard flow.
 
 ### Connection references
 
@@ -115,7 +115,7 @@ There are two main personas in PowerShield: the **Maker** and the **Admin**.
 
 ### Maker
 
-Any Power Platform user assigned the **PowerShield Maker** Dataverse security role. Makers are the primary requestors who need connector access for their environments.
+Any Power Platform user assigned the **PowerShield Maker** or **System Administrator** Dataverse security role. The application treats both roles as a Maker — users with either (or both) roles receive the full maker experience.
 
 - Create and submit new connector access requests via the 5-step wizard.
 - Create and manage Service Trees and Environment Containers.
@@ -139,8 +139,6 @@ A user assigned the **PowerShield Admin** Dataverse security role. Admins are re
 - Configure notification delivery settings (sender mailbox, admin distribution list, app URL).
 - Post comments with file attachments on any non-Draft request.
 
-> **Note**: Admins cannot create requests. A user can hold both the Maker and Admin roles simultaneously — in that case, both maker and admin capabilities are available.
-
 ## Get started
 
 ### Accessing PowerShield
@@ -152,10 +150,10 @@ PowerShield is accessed as an integrated feature within the Copilot Studio Kit. 
 When you first navigate to PowerShield, the system automatically detects your assigned security roles:
 
 - **PowerShield Admin** role → Admin experience with all-tenant visibility and management controls
-- **PowerShield Maker** role → Maker experience with personal request management
+- **PowerShield Maker** or **System Administrator** role → Maker experience with personal request management
 - **No recognized role** → An "Unauthorized" screen is displayed with instructions to contact your administrator
 
-If a user has both roles, the Admin experience takes priority, though maker actions (like Withdraw on own requests) remain available.
+If a user has the Admin role alongside a Maker/System Administrator role, the Admin experience takes priority, though maker actions (like Withdraw on own requests) remain available.
 
 ## Maker workflow
 
