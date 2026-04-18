@@ -334,9 +334,6 @@ Select the connectors you want included in your DLP policy.
 - **Tier**: Filter by Premium or Standard (dropdown).
 - **Release**: Filter by Production or Preview (dropdown).
 - **Risk Level**: Filter by High, Medium, Low, Blocked, or None (dropdown).
-- Click the **search button** (🔍) to apply filters.
-
-**Selected count:** A summary (e.g., "1 selected") is shown below the filter bar.
 
 **Connector grid columns:**
 - Checkbox for selection
