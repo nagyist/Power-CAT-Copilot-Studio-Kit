@@ -184,11 +184,6 @@ Four stat cards at the top summarize your request portfolio:
 
 Clicking a stat card filters the request grid to show only requests matching that status group.
 
-#### Search and refresh
-
-- **Search**: Filter requests by request number or service tree name using the "Search my requests..." search box.
-- **Refresh**: Click the refresh icon to manually refresh the request list.
-
 #### Request grid
 
 The grid displays your requests with the following columns:
@@ -208,10 +203,6 @@ Clicking a row navigates to the request detail view. The row action menu (⋮) p
 ![Maker Clone and Withdraw Menu](./media/ps_maker_clone_withdraw.png)
 
 *Figure 7: Row action menu showing Clone and Withdraw options*
-
-#### Pagination
-
-The grid supports pagination with a configurable "Show N records per page" dropdown and page navigation controls showing total record count.
 
 ---
 
@@ -293,7 +284,6 @@ Select the Service Tree and Environment Container for your request.
 
 **Service Tree selection** (left panel):
 - Browse your available Service Trees in the grid (only trees where you are a member are shown).
-- Use the search box to filter by name.
 - Select a tree by clicking its radio button.
 - Click **+ New Service Tree** to create a new one inline.
 
@@ -339,8 +329,7 @@ Select the connectors you want included in your DLP policy.
 
 *Figure 14: Wizard Step 3 — connector selection grid with search, filters, and multi-select checkboxes*
 
-**Search and filter controls:**
-- **Search**: Search connectors by name using the search box.
+**Filter controls:**
 - **Publisher**: Filter by connector publisher.
 - **Tier**: Filter by Premium or Standard (dropdown).
 - **Release**: Filter by Production or Preview (dropdown).
@@ -577,11 +566,6 @@ Clicking a stat card filters the request grid to show only requests matching tha
 
 The admin header includes a **Settings** (⚙) gear icon in the top-right corner, which navigates to the [Settings Hub](#settings-hub) for centralized access to all admin configuration screens.
 
-#### Search and refresh
-
-- **Search**: Filter requests using the "Search requests..." search box.
-- **Refresh**: Click the refresh icon to manually refresh the request list.
-
 #### Admin grid
 
 The admin grid displays all requests across the tenant with the following columns:
@@ -598,13 +582,9 @@ The admin grid displays all requests across the tenant with the following column
 | Created By | The user who submitted the request |
 | Assigned Admin | The admin assigned to review the request (or "—" if unassigned) |
 
-#### Pagination
-
-The grid supports pagination with a configurable "Show N records per page" dropdown and page navigation controls showing total record count.
-
 ---
 
-### Reviewing a request (Admin)
+### Reviewinga request (Admin)
 
 Open any request from the home screen to access the admin review interface.
 
