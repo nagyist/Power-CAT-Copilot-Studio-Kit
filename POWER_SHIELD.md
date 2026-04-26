@@ -161,14 +161,12 @@ PowerShield is an embedded feature available in both the **Copilot Studio Kit fo
 - **Makers** open the **Copilot Studio Kit for Makers** app. The sidebar includes other maker-focused features (Component Library, Webchat Playground, Advanced Testing, etc.) alongside the Governance section.
 - **Admins** open the **Copilot Studio Kit for Admins** app. The sidebar includes other admin-focused features (Agent Inventory, Conversation KPIs, Conversation Analyzer, etc.) alongside the Governance section, which also contains the Compliance Hub.
 
-If your organization uses the Model-Driven App (MDA) sitemap, a single **PowerShield** link appears under the **Governance** section. Clicking it triggers a unified launcher that automatically detects your security role and routes you to the correct code app — admin role takes precedence if you have both roles.
-
 ### Role detection
 
-When you navigate to PowerShield, the system automatically detects your assigned security roles:
+When you navigate to PowerShield, the app automatically detects your assigned security roles:
 
-- **PowerShield Admin** role → Routed to **Copilot Studio Kit for Admins** with all-tenant visibility and management controls
-- **PowerShield Maker** or **System Administrator** role → Routed to **Copilot Studio Kit for Makers** with personal request management
+- **PowerShield Admin** or **System Administrator** role (in Copilot Studio Kit for Admins) → Admin experience with all-tenant visibility and management controls
+- **PowerShield Maker** or **System Administrator** role (in Copilot Studio Kit for Makers) → Maker experience with personal request management
 - **No recognized role** → An "Unauthorized" screen is displayed with instructions to contact your administrator
 
 If a user has the Admin role alongside a Maker/System Administrator role, the Admin experience takes priority, though maker actions (like Withdraw on own requests) remain available.
