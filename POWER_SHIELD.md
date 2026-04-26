@@ -88,8 +88,6 @@ This connector is used to post connector actions and manage DLP policies via the
 
 *Figure 5: HTTP with Microsoft Entra ID connection for BAPAPI — Base Resource URL and Entra ID Resource URI settings*
 
-> **Important**: Both connection references must have active connections created by a user with appropriate Power Platform admin permissions. Without these connections, environment discovery and DLP policy fulfillment will fail.
-
 ### Connector and Connector Actions sync (Required)
 
 PowerShield relies on two Dataverse tables — **Connectors** (`cat_connector`) and **Connector Actions** (`cat_connectoraction`) — that must be populated before the feature can be used. These tables serve as the connector catalog that makers browse when selecting connectors in the request wizard (Step 3). Without this data, the connector selection grid will be empty and no requests can be created.
