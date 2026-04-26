@@ -2,9 +2,16 @@
 
 PowerShield enables organizations using the Power Platform to manage connector access through a structured, approval-based workflow for Data Loss Prevention (DLP) policies. It provides a self-service experience for makers to request connector access, and a review interface for administrators to approve, reject, or manage those requests. Every DLP policy change is traceable to a PowerShield request, ensuring governance compliance and auditability.
 
+PowerShield is delivered as an embedded feature within two dedicated code apps:
+
+- **Copilot Studio Kit for Makers** — the maker experience for submitting and managing connector access requests
+- **Copilot Studio Kit for Admins** — the admin experience for reviewing, approving, and configuring PowerShield
+
+This two-app architecture ensures that each persona is only prompted to consent to the connectors they actually need. Makers are never asked to authorize the elevated `Power Platform for Admins` connector, which eliminates adoption barriers in organizations that restrict admin-level connectors. Both apps share the same Dataverse tables — no data duplication or synchronization is required.
+
 ![PowerShield Admin Home Screen](./media/ps_admin_home.png)
 
-*Figure 1: PowerShield Admin home screen showing stat cards, request grid, and settings access*
+*Figure 1: PowerShield Admin home screen in Copilot Studio Kit for Admins, showing stat cards, all-tenant request grid, and settings access*
 
 ## Key concepts
 
@@ -21,15 +28,24 @@ PowerShield enables organizations using the Power Platform to manage connector a
 
 Before using PowerShield, ensure you have:
 
-- **Copilot Studio Kit prerequisites**: All [prerequisites for the Copilot Studio Kit](PREREQUISITES.md) must be installed and configured.
-- **Security roles**: Users must be assigned one of the following Dataverse security roles in the environment where the Copilot Studio Kit is hosted:
-  - **PowerShield Maker** or **System Administrator** — for submitting and managing connector access requests (either role grants maker access)
-  - **PowerShield Admin** — for reviewing, approving, and configuring PowerShield
+- **Copilot Studio Kit prerequisites**: All [prerequisites for the Copilot Studio Kit](PREREQUISITES.md) must be installed and configured for both the **Copilot Studio Kit for Makers** and **Copilot Studio Kit for Admins** code apps.
+- **Security roles**: Users must be assigned one of the following Dataverse security roles in the environment where the code apps are hosted:
+  - **PowerShield Maker** or **System Administrator** — grants access to the maker experience in **Copilot Studio Kit for Makers** for submitting and managing connector access requests
+  - **PowerShield Admin** — grants access to the admin experience in **Copilot Studio Kit for Admins** for reviewing, approving, and configuring PowerShield
 - **System Administrator role in target environments**: Makers must have the System Administrator security role in each Power Platform environment they include in their request. This is validated during the wizard flow.
+
+> ⚠️ **Critical — Run sync flows before first use:** PowerShield **will not work** until the **Sync flow | Connectors** and **Sync flow | Connector Actions** cloud flows have each run at least once. These flows populate the `cat_connector` and `cat_connectoraction` Dataverse tables that power the connector selection grid in the request wizard (Step 3). Without this data, makers cannot create policy requests. See [Connector and Connector Actions sync](#connector-and-connector-actions-sync-required) for setup steps.
 
 ### Connection references
 
-PowerShield uses two **HTTP with Microsoft Entra ID (preauthorized)** connection references that must be configured before the feature can operate. These connectors enable PowerShield to interact with the Power Platform APIs for environment discovery and DLP policy management.
+PowerShield uses two **HTTP with Microsoft Entra ID (preauthorized)** connection references that must be configured before the feature can operate. These connection references are environment-level resources shared across both code apps and enable PowerShield to interact with the Power Platform APIs for environment discovery and DLP policy management.
+
+In addition to these HTTP connection references, each code app registers its own platform connectors:
+
+| Code App | Platform Connectors |
+|----------|-------------------|
+| **Copilot Studio Kit for Makers** | Microsoft Dataverse, Power Apps for Makers |
+| **Copilot Studio Kit for Admins** | Microsoft Dataverse, Power Platform for Admins |
 
 #### 1. PowerShield APIFlow
 
@@ -111,11 +127,13 @@ Both flows are designed to run on a **daily schedule** to keep the connector cat
 
 ## Roles and responsibilities
 
-There are two main personas in PowerShield: the **Maker** and the **Admin**.
+There are two main personas in PowerShield: the **Maker** and the **Admin**. Each persona has its own dedicated code app, ensuring users are only prompted to consent to the connectors relevant to their role.
 
 ### Maker
 
 Any Power Platform user assigned the **PowerShield Maker** or **System Administrator** Dataverse security role. The application treats both roles as a Maker — users with either (or both) roles receive the full maker experience.
+
+**App:** Makers access PowerShield through the **Copilot Studio Kit for Makers** code app. The PowerShield page displays a **[Maker]** badge in the header. Makers are only prompted to consent to `Microsoft Dataverse` and `Power Apps for Makers` connectors — never the elevated `Power Platform for Admins` connector.
 
 - Create and submit new connector access requests via the 5-step wizard.
 - Create and manage Service Trees and Environment Containers.
@@ -130,6 +148,8 @@ Any Power Platform user assigned the **PowerShield Maker** or **System Administr
 
 A user assigned the **PowerShield Admin** Dataverse security role. Admins are responsible for reviewing requests, managing governance configuration, and ensuring connector access aligns with organizational policies.
 
+**App:** Admins access PowerShield through the **Copilot Studio Kit for Admins** code app. The PowerShield page displays an **[Admin]** badge in the header. Admins are prompted to consent to `Microsoft Dataverse` and `Power Platform for Admins` connectors.
+
 - View all requests across the tenant.
 - Assign a request to themselves via **Assign to Me** (set to Under Review).
 - Approve or reject requests (rejection requires a comment).
@@ -143,19 +163,26 @@ A user assigned the **PowerShield Admin** Dataverse security role. Admins are re
 
 ### Accessing PowerShield
 
-PowerShield is accessed as an integrated feature within the Copilot Studio Kit. Navigate to the **Governance** section in the left navigation sidebar and click **Power Shield**.
+PowerShield is an embedded feature available in both the **Copilot Studio Kit for Makers** and the **Copilot Studio Kit for Admins** code apps. In each app, navigate to the **Governance** section in the left sidebar and click **Power Shield**.
+
+- **Makers** open the **Copilot Studio Kit for Makers** app. The sidebar includes other maker-focused features (Component Library, Webchat Playground, Advanced Testing, etc.) alongside the Governance section.
+- **Admins** open the **Copilot Studio Kit for Admins** app. The sidebar includes other admin-focused features (Agent Inventory, Conversation KPIs, Conversation Analyzer, etc.) alongside the Governance section, which also contains the Compliance Hub.
+
+If your organization uses the Model-Driven App (MDA) sitemap, a single **PowerShield** link appears under the **Governance** section. Clicking it triggers a unified launcher that automatically detects your security role and routes you to the correct code app — admin role takes precedence if you have both roles.
 
 ### Role detection
 
-When you first navigate to PowerShield, the system automatically detects your assigned security roles:
+When you navigate to PowerShield, the system automatically detects your assigned security roles:
 
-- **PowerShield Admin** role → Admin experience with all-tenant visibility and management controls
-- **PowerShield Maker** or **System Administrator** role → Maker experience with personal request management
+- **PowerShield Admin** role → Routed to **Copilot Studio Kit for Admins** with all-tenant visibility and management controls
+- **PowerShield Maker** or **System Administrator** role → Routed to **Copilot Studio Kit for Makers** with personal request management
 - **No recognized role** → An "Unauthorized" screen is displayed with instructions to contact your administrator
 
 If a user has the Admin role alongside a Maker/System Administrator role, the Admin experience takes priority, though maker actions (like Withdraw on own requests) remain available.
 
 ## Maker workflow
+
+> All maker workflow takes place within the **Copilot Studio Kit for Makers** code app. The PowerShield page header displays a **[Maker]** badge to indicate the active persona.
 
 ### Home screen (Maker view)
 
@@ -536,6 +563,8 @@ After a request is submitted, you can exchange messages with admins via the Comm
 
 ## Admin workflow
 
+> All admin workflow takes place within the **Copilot Studio Kit for Admins** code app. The PowerShield page header displays an **[Admin]** badge to indicate the active persona.
+
 ### Home screen (Admin view)
 
 The Admin home screen provides a tenant-wide view of all policy requests with management controls.
@@ -581,7 +610,7 @@ The admin grid displays all requests across the tenant with the following column
 
 ---
 
-### Reviewinga request (Admin)
+### Reviewing a request (Admin)
 
 Open any request from the home screen to access the admin review interface.
 
@@ -907,6 +936,10 @@ PowerShield uses the following key Dataverse tables. All tables use the `cat_` p
 ## FAQs and troubleshooting
 
 ### General questions
+
+**Q: Why are there two separate apps for PowerShield?**
+
+A: PowerShield is split across **Copilot Studio Kit for Makers** and **Copilot Studio Kit for Admins** to isolate connector consent. When a user opens a Power Apps code app, the Power Platform consent dialog prompts them to authorize all registered connectors. By separating the apps, makers are never prompted to consent to the elevated `Power Platform for Admins` connector, which many organizations restrict to admin-level users only. This eliminates adoption barriers and follows the principle of least privilege. Both apps share the same Dataverse tables — no data duplication occurs.
 
 **Q: What happens after my request is approved?**
 
