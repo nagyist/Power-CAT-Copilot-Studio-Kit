@@ -118,8 +118,6 @@ Both flows are designed to run on a **daily schedule** to keep the connector cat
 - **Connector sync** applies the **default-blocked model**: newly discovered non-Microsoft-published connectors are automatically set to `Blocked by Admin = Yes`. Microsoft-published connectors default to unblocked. Any admin overrides (block/unblock via Connector Configurations) are preserved and never overwritten by subsequent syncs.
 - **Connector Actions sync** uses the `cat_UpsertConnectorActions` Dataverse Custom API to efficiently create, update, and deactivate action records. Stale actions (removed from the connector by Microsoft) are automatically deactivated.
 
-> **Note**: Blocking or unblocking a connector through the **Connector Configurations** screen takes effect **immediately** — no sync is required. The daily sync only applies default blocking to newly discovered connectors.
-
 ## Roles and responsibilities
 
 There are two main personas in PowerShield: the **Maker** and the **Admin**. Each persona has its own dedicated code app, ensuring users are only prompted to consent to the connectors relevant to their role.
