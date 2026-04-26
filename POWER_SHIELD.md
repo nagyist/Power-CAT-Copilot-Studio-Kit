@@ -32,9 +32,8 @@ Before using PowerShield, ensure you have:
 - **Security roles**: Users must be assigned one of the following Dataverse security roles in the environment where the code apps are hosted:
   - **PowerShield Maker** or **System Administrator** — grants access to the maker experience in **Copilot Studio Kit for Makers** for submitting and managing connector access requests
   - **PowerShield Admin** — grants access to the admin experience in **Copilot Studio Kit for Admins** for reviewing, approving, and configuring PowerShield
-- **System Administrator role in target environments**: Makers must have the System Administrator security role in each Power Platform environment they include in their request. This is validated during the wizard flow.
 
-> ⚠️ **Critical — Run sync flows before first use:** PowerShield **will not work** until the **Sync flow | Connectors** and **Sync flow | Connector Actions** cloud flows have each run at least once. These flows populate the `cat_connector` and `cat_connectoraction` Dataverse tables that power the connector selection grid in the request wizard (Step 3). Without this data, makers cannot create policy requests. See [Connector and Connector Actions sync](#connector-and-connector-actions-sync-required) for setup steps.
+> ⚠️**Critical — Run sync flows before first use:** PowerShield **will not work** until the **Sync flow | Connectors** and **Sync flow | Connector Actions** cloud flows have each run at least once. These flows populate the `cat_connector` and `cat_connectoraction` Dataverse tables that power the connector selection grid in the request wizard (Step 3). Without this data, makers cannot create policy requests. See [Connector and Connector Actions sync](#connector-and-connector-actions-sync-required) for setup steps.
 
 ### Connection references
 
