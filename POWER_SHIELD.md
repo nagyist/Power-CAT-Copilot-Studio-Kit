@@ -150,7 +150,7 @@ A user assigned the **PowerShield Admin** or **System Administrator** Dataverse 
 - Manage connector configurations — selectively unblock connectors for maker use, assign risk levels, and configure action visibility.
 - Configure the compliance questionnaire (categories, questions, answer options).
 - Configure notification delivery settings (sender mailbox, admin distribution list, app URL).
-- Post comments with file attachments on any non-Draft request.
+- Post comments with file attachments on any submitted request.
 
 ## Get started
 
@@ -526,7 +526,7 @@ Click any request row on the home screen to view its full details.
 
 The detail view has a tabbed layout:
 - **Summary** tab: Full request details including Service Tree, environments, connectors, questionnaire answers, justification, supporting document, co-owners, and admin comment (if any).
-- **Comments** tab (non-Draft requests only): Discussion thread for communicating with admins.
+- **Comments** tab (available after submission): Discussion thread for communicating with admins.
 
 **Available actions by status:**
 
