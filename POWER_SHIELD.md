@@ -31,7 +31,7 @@ Before using PowerShield, ensure you have:
 - **Copilot Studio Kit prerequisites**: All [prerequisites for the Copilot Studio Kit](PREREQUISITES.md) must be installed and configured for both the **Copilot Studio Kit for Makers** and **Copilot Studio Kit for Admins** code apps.
 - **Security roles**: Users must be assigned one of the following Dataverse security roles in the environment where the code apps are hosted:
   - **PowerShield Maker** or **System Administrator** — grants access to the maker experience in **Copilot Studio Kit for Makers** for submitting and managing connector access requests
-  - **PowerShield Admin** — grants access to the admin experience in **Copilot Studio Kit for Admins** for reviewing, approving, and configuring PowerShield
+  - **PowerShield Admin** or **System Administrator** — grants access to the admin experience in **Copilot Studio Kit for Admins** for reviewing, approving, and configuring PowerShield
 
 > ⚠️**Critical — Run sync flows before first use:** PowerShield **will not work** until the **Sync flow | Connectors** and **Sync flow | Connector Actions** cloud flows have each run at least once. These flows populate the `cat_connector` and `cat_connectoraction` Dataverse tables that power the connector selection grid in the request wizard (Step 3). Without this data, makers cannot create policy requests. See [Connector and Connector Actions sync](#connector-and-connector-actions-sync-required) for setup steps.
 
@@ -143,7 +143,7 @@ Any Power Platform user assigned the **PowerShield Maker** or **System Administr
 
 ### Admin
 
-A user assigned the **PowerShield Admin** Dataverse security role. Admins are responsible for reviewing requests, managing governance configuration, and ensuring connector access aligns with organizational policies.
+A user assigned the **PowerShield Admin** or **System Administrator** Dataverse security role. Admins are responsible for reviewing requests, managing governance configuration, and ensuring connector access aligns with organizational policies.
 
 **App:** Admins access PowerShield through the **Copilot Studio Kit for Admins** code app. The PowerShield page displays an **[Admin]** badge in the header. Admins are prompted to consent to `Microsoft Dataverse` and `Power Platform for Admins` connectors.
 
