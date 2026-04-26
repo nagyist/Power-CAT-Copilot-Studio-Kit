@@ -21,10 +21,6 @@ PowerShield is delivered as an embedded feature within two dedicated code apps:
 
 This two-app architecture isolates connector consent per persona. Makers consent only to `Microsoft Dataverse` and `Power Apps for Makers` — never the elevated `Power Platform for Admins` connector. This eliminates adoption barriers in organizations that restrict admin-level connectors. Both apps share the same Dataverse tables with no data duplication.
 
-![PowerShield Admin Home Screen](./media/ps_admin_home.png)
-
-*Figure 1: Admin home screen*
-
 ## Key concepts
 
 - **Policy Request**: A maker's formal request to access specific connectors in one or more environments. Each request follows a lifecycle from Draft through Implemented (or Rejected/Withdrawn).
