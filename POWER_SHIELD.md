@@ -101,7 +101,7 @@ Two scheduled cloud flows are responsible for populating and keeping these table
 
 #### First-time setup
 
-After installing the PowerShield solution:
+After installing the Copilot Studio Kit solution:
 
 1. Navigate to **Solutions > Copilot Studio Accelerator > Cloud flows** in your Power Platform environment.
 2. Locate and **enable** the **"Sync flow | Connectors"** flow.
@@ -110,8 +110,6 @@ After installing the PowerShield solution:
 5. **Run the flow manually** and wait for it to complete successfully.
 6. Verify the data by opening the **Connectors** (`cat_connector`) table in the model-driven app — you should see hundreds of connector records.
 7. Verify the **Connector Actions** (`cat_connectoraction`) table — you should see action records for each connector.
-
-> **Important**: These flows must run successfully **before** any maker can create a policy request. If the Connectors table is empty, the wizard's connector selection grid (Step 3) will show "No connectors found" and makers cannot proceed.
 
 #### Ongoing sync
 
