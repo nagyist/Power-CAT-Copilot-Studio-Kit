@@ -38,7 +38,7 @@ Before using PowerShield, ensure you have:
 
 - **Copilot Studio Kit prerequisites**: All [prerequisites for the Copilot Studio Kit](PREREQUISITES.md) installed and configured for both code apps.
 - **Security roles**: Users must be assigned one of the following Dataverse security roles:
-  - **PowerShield Maker** or **System Administrator** — maker experience in Copilot Studio Kit for Makers
+  - **CSK - Maker** or **System Administrator** — maker experience in Copilot Studio Kit for Makers
   - **PowerShield Admin** or **System Administrator** — admin experience in Copilot Studio Kit for Admins
 
 > ⚠️ **Critical — Run sync flows before first use:** PowerShield **will not work** until the **Sync flow | Connectors** and **Sync flow | Connector Actions** cloud flows have each run at least once. These flows populate the connector catalog used in the request wizard (Step 3). See [Connector and Connector Actions sync](#connector-and-connector-actions-sync) for setup steps.
@@ -121,7 +121,7 @@ Both flows run on a **daily schedule**. The connector sync preserves admin overr
 
 ### Maker
 
-Requires the **PowerShield Maker** or **System Administrator** security role. Access PowerShield through the **Copilot Studio Kit for Makers** app (a **[Maker]** badge displays in the header).
+Requires the **CSK - Maker** or **System Administrator** security role. Access PowerShield through the **Copilot Studio Kit for Makers** app (a **[Maker]** badge displays in the header).
 
 Makers can:
 
