@@ -433,21 +433,13 @@ The admin detail view has five tabs:
 - **Activity** — fulfillment audit log
 - **Notifications** — email notification history
 
-#### Fulfillment tab
-
-After approval, this tab shows the DLP policy name, policy ID (with copy buttons), and per-environment fulfillment status.
-
-![Fulfillment Tab](./media/ps_admin_fulfillment_tab.png)
-
-*Figure 23: Fulfillment tab*
-
 #### Assign to Me
 
 Click **Assign to Me** on a **Submitted** request to move it to **Under Review**, signaling to other admins that you're reviewing it.
 
 ![Assign Request Dialog](./media/ps_admin_assign_request.png)
 
-*Figure 24: Assign Request dialog*
+*Figure 23: Assign Request dialog*
 
 #### Approve a request
 
@@ -465,13 +457,13 @@ Approval uses a **2-step wizard** for requests in **Submitted** or **Under Revie
 
 ![Review & Approve Dialog - Step 1](./media/ps_admin_review_approve.png)
 
-*Figure 25: Approval Step 1 — DLP Policy Impact*
+*Figure 24: Approval Step 1 — DLP Policy Impact*
 
 **Step 2 — Confirmation:**
 
 ![Review & Approve Dialog - Step 2](./media/ps_admin_approve_confirm.png)
 
-*Figure 26: Approval Step 2 — confirmation*
+*Figure 25: Approval Step 2 — confirmation*
 
 4. Review the warning: approving creates an immediate, irreversible DLP policy (reversible only via the Power Platform Admin Center).
 5. Enter a required **Admin comment**.
@@ -484,6 +476,14 @@ After approval, PowerShield automatically sets the status to **Implementing**, r
 1. Click **Reject** on a **Submitted** or **Under Review** request.
 2. Enter a required comment explaining the rejection.
 3. Click **Confirm Reject**. The maker is notified.
+
+#### Fulfillment tab
+
+After approval, this tab shows the DLP policy name, policy ID (with copy buttons), and per-environment fulfillment status.
+
+![Fulfillment Tab](./media/ps_admin_fulfillment_tab.png)
+
+*Figure 26: Fulfillment tab*
 
 ---
 
