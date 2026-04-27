@@ -423,77 +423,13 @@ The admin home screen provides a tenant-wide view of all policy requests.
 
 ---
 
-### Reviewing a request (Admin)
-
-The admin detail view has five tabs:
-
-- **Summary** — full request details (same as maker view)
-- **Fulfillment** — DLP policy details and per-environment fulfillment status
-- **Comments** — discussion thread with the maker
-- **Activity** — fulfillment audit log
-- **Notifications** — email notification history
-
-#### Assign to Me
-
-Click **Assign to Me** on a **Submitted** request to move it to **Under Review**, signaling to other admins that you're reviewing it.
-
-![Assign Request Dialog](./media/ps_admin_assign_request.png)
-
-*Figure 23: Assign Request dialog*
-
-#### Approve a request
-
-Approval uses a **2-step wizard** for requests in **Submitted** or **Under Review** status:
-
-**Step 1 — DLP Policy Impact review:**
-
-1. Click **Approve**.
-2. The dialog shows a pre-flight check:
-   - **No conflicts** — green success message with environment and connector counts.
-   - **Existing policies affected** — warning listing affected policies and environments.
-   - **Zero-environment conflict** — approval is **blocked** until the admin resolves the conflict in the Power Platform Admin Center.
-   - **Post-submission blocked connectors** — warning that these connectors will be excluded.
-3. Click **Next →** to proceed.
-
-![Review & Approve Dialog - Step 1](./media/ps_admin_review_approve.png)
-
-*Figure 24: Approval Step 1 — DLP Policy Impact*
-
-**Step 2 — Confirmation:**
-
-![Review & Approve Dialog - Step 2](./media/ps_admin_approve_confirm.png)
-
-*Figure 25: Approval Step 2 — confirmation*
-
-4. Review the warning: approving creates an immediate, irreversible DLP policy (reversible only via the Power Platform Admin Center).
-5. Enter a required **Admin comment**.
-6. Click **Confirm Approve**.
-
-After approval, PowerShield automatically sets the status to **Implementing**, resolves DLP conflicts, creates the scoped policy, and updates to **Implemented** (or **Policy Failed** on error).
-
-#### Reject a request
-
-1. Click **Reject** on a **Submitted** or **Under Review** request.
-2. Enter a required comment explaining the rejection.
-3. Click **Confirm Reject**. The maker is notified.
-
-#### Fulfillment tab
-
-After approval, this tab shows the DLP policy name, policy ID (with copy buttons), and per-environment fulfillment status.
-
-![Fulfillment Tab](./media/ps_admin_fulfillment_tab.png)
-
-*Figure 26: Fulfillment tab*
-
----
-
 ### Settings Hub
 
-Click the gear (⚙) icon on the admin home screen.
+Click the gear (⚙) icon on the admin home screen to configure PowerShield before processing requests.
 
 ![Settings Hub](./media/ps_admin_settings_hub.png)
 
-*Figure 27: Settings Hub*
+*Figure 23: Settings Hub*
 
 Three configuration areas:
 
@@ -513,7 +449,7 @@ Browse and manage all connectors synced from your Power Platform environment. Bl
 
 ![Connector Configurations](./media/ps_admin_configure_connectors.png)
 
-*Figure 28: Connector Configurations*
+*Figure 24: Connector Configurations*
 
 **Toolbar:** View details and actions, Block, Unblock, Set risk level, Show blocked toggle, Search.
 
@@ -521,7 +457,7 @@ Browse and manage all connectors synced from your Power Platform environment. Bl
 
 ![Connector Detail Panel](./media/ps_admin_configure_connectors_actions.png)
 
-*Figure 29: Connector detail panel*
+*Figure 25: Connector detail panel*
 
 ---
 
@@ -531,7 +467,7 @@ Manage the compliance questionnaire that appears in the maker's wizard (Step 2).
 
 ![Question Configuration](./media/ps_admin_settings_questions.png)
 
-*Figure 30: Question Configuration*
+*Figure 26: Question Configuration*
 
 The interface has two tabs:
 
@@ -550,7 +486,7 @@ Configure email notification delivery.
 
 ![Notification Settings](./media/ps_notification_settings.png)
 
-*Figure 31: Notification Settings*
+*Figure 27: Notification Settings*
 
 | Setting | Description | Required |
 |---------|-------------|----------|
@@ -560,6 +496,70 @@ Configure email notification delivery.
 | **Notifications Enabled** | Enable or disable all email notifications | — |
 
 > **Important**: Without the Sender Email Address configured, all email notifications silently fail. Ensure server-side synchronization is enabled for the sender mailbox in Exchange Online.
+
+---
+
+### Reviewing a request (Admin)
+
+The admin detail view has five tabs:
+
+- **Summary** — full request details (same as maker view)
+- **Fulfillment** — DLP policy details and per-environment fulfillment status
+- **Comments** — discussion thread with the maker
+- **Activity** — fulfillment audit log
+- **Notifications** — email notification history
+
+#### Assign to Me
+
+Click **Assign to Me** on a **Submitted** request to move it to **Under Review**, signaling to other admins that you're reviewing it.
+
+![Assign Request Dialog](./media/ps_admin_assign_request.png)
+
+*Figure 28: Assign Request dialog*
+
+#### Approve a request
+
+Approval uses a **2-step wizard** for requests in **Submitted** or **Under Review** status:
+
+**Step 1 — DLP Policy Impact review:**
+
+1. Click **Approve**.
+2. The dialog shows a pre-flight check:
+   - **No conflicts** — green success message with environment and connector counts.
+   - **Existing policies affected** — warning listing affected policies and environments.
+   - **Zero-environment conflict** — approval is **blocked** until the admin resolves the conflict in the Power Platform Admin Center.
+   - **Post-submission blocked connectors** — warning that these connectors will be excluded.
+3. Click **Next →** to proceed.
+
+![Review & Approve Dialog - Step 1](./media/ps_admin_review_approve.png)
+
+*Figure 29: Approval Step 1 — DLP Policy Impact*
+
+**Step 2 — Confirmation:**
+
+![Review & Approve Dialog - Step 2](./media/ps_admin_approve_confirm.png)
+
+*Figure 30: Approval Step 2 — confirmation*
+
+4. Review the warning: approving creates an immediate, irreversible DLP policy (reversible only via the Power Platform Admin Center).
+5. Enter a required **Admin comment**.
+6. Click **Confirm Approve**.
+
+After approval, PowerShield automatically sets the status to **Implementing**, resolves DLP conflicts, creates the scoped policy, and updates to **Implemented** (or **Policy Failed** on error).
+
+#### Reject a request
+
+1. Click **Reject** on a **Submitted** or **Under Review** request.
+2. Enter a required comment explaining the rejection.
+3. Click **Confirm Reject**. The maker is notified.
+
+#### Fulfillment tab
+
+After approval, this tab shows the DLP policy name, policy ID (with copy buttons), and per-environment fulfillment status.
+
+![Fulfillment Tab](./media/ps_admin_fulfillment_tab.png)
+
+*Figure 31: Fulfillment tab*
 
 ---
 
