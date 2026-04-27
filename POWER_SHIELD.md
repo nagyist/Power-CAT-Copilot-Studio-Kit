@@ -41,7 +41,7 @@ Before using PowerShield, ensure you have:
   - **CSK - Maker** or **System Administrator** — maker experience in Copilot Studio Kit for Makers
   - **PowerShield Admin** or **System Administrator** — admin experience in Copilot Studio Kit for Admins
 
-> ⚠️ **Critical — Run sync flows before first use:** PowerShield **will not work** until the **Sync flow | Connectors** and **Sync flow | Connector Actions** cloud flows have each run at least once. These flows populate the connector catalog used in the request wizard (Step 3). See [Connector and Connector Actions sync](#connector-and-connector-actions-sync) for setup steps.
+> ⚠️ **Critical — Run sync flows before first use:** PowerShield **will not work** until the **PowerShield | Sync Connectors** and **PowerShield | Sync Connector Actions** cloud flows have each run at least once. These flows populate the connector catalog used in the request wizard (Step 3). See [Connector and Connector Actions sync](#connector-and-connector-actions-sync) for setup steps.
 
 > **Note**: Developer environments are automatically excluded from PowerShield. Only Production, Sandbox, Trial, Default, and Teams environments are available.
 
@@ -100,16 +100,16 @@ PowerShield relies on two Dataverse tables — **Connectors** (`cat_connector`) 
 
 | Cloud Flow | Purpose | Target Table |
 |------------|---------|--------------|
-| **Sync flow \| Connectors** | Discovers all tenant connectors. Applies the [default-blocked model](#key-concepts): new non-Microsoft connectors are blocked by default; admin overrides are preserved. | `cat_connector` |
-| **Sync flow \| Connector Actions** | Fetches available actions per active connector from the Flow API. | `cat_connectoraction` |
+| **PowerShield \| Sync Connectors** | Discovers all tenant connectors. Applies the [default-blocked model](#key-concepts): new non-Microsoft connectors are blocked by default; admin overrides are preserved. | `cat_connector` |
+| **PowerShield \| Sync Connector Actions** | Fetches available actions per active connector from the Flow API. | `cat_connectoraction` |
 
 #### First-time setup
 
 After installing the Copilot Studio Kit solution:
 
 1. Navigate to **Solutions > Copilot Studio Accelerator > Cloud flows**.
-2. Enable and **run manually** the **"Sync flow | Connectors"** flow. Wait for completion.
-3. Enable and **run manually** the **"Sync flow | Connector Actions"** flow. Wait for completion.
+2. Enable and **run manually** the **"PowerShield | Sync Connectors"** flow. Wait for completion.
+3. Enable and **run manually** the **"PowerShield | Sync Connector Actions"** flow. Wait for completion.
 4. Verify: open the **Connectors** (`cat_connector`) table — you should see hundreds of records.
 5. Verify: open the **Connector Actions** (`cat_connectoraction`) table — you should see action records.
 
@@ -673,4 +673,4 @@ All tables use the `cat_` publisher prefix.
 **No connectors available in wizard Step 3**
 
 - Non-Microsoft connectors are blocked by default. Ask your admin to unblock connectors via **Settings Hub** → **Connector Configurations**.
-- Ensure the "Sync flow | Connectors" has run at least once.
+- Ensure the "PowerShield | Sync Connectors" has run at least once.
