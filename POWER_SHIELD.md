@@ -39,11 +39,14 @@ Before using PowerShield, ensure you have:
 - **Copilot Studio Kit prerequisites**: All [prerequisites for the Copilot Studio Kit](PREREQUISITES.md) installed and configured for both code apps.
 - **Security roles**: Users must be assigned one of the following Dataverse security roles:
   - **CSK - Maker** or **System Administrator** — maker experience in Copilot Studio Kit for Makers
-  - **PowerShield Admin** or **System Administrator** — admin experience in Copilot Studio Kit for Admins
+  - **CSK - Administrator** or **System Administrator** — admin experience in Copilot Studio Kit for Admins
+- **Power Platform Administrator role** (admins only): Admins who approve requests and create DLP policies must also have the **Power Platform Administrator** role assigned in the [Microsoft 365 admin center](https://admin.microsoft.com). This Microsoft Entra ID role grants permission to create, update, and delete DLP policies via the Power Platform for Admins connector. Without it, DLP policy creation fails after approval.
 
-> ⚠️ **Critical — Run sync flows before first use:** PowerShield **will not work** until the **PowerShield | Sync Connectors** and **PowerShield | Sync Connector Actions** cloud flows have each run at least once. These flows populate the connector catalog used in the request wizard (Step 3). See [Connector and Connector Actions sync](#connector-and-connector-actions-sync) for setup steps.
+> [!WARNING]
+> PowerShield **will not work** until the **PowerShield | Sync Connectors** and **PowerShield | Sync Connector Actions** cloud flows have each run at least once. These flows populate the connector catalog used in the request wizard (Step 3). See [Connector and Connector Actions sync](#connector-and-connector-actions-sync) for setup steps.
 
-> **Note**: Developer environments are automatically excluded from PowerShield. Only Production, Sandbox, Trial, Default, and Teams environments are available.
+> [!NOTE]
+> Developer environments are automatically excluded from PowerShield. Only Production, Sandbox, Trial, Default, and Teams environments are available.
 
 ### Connection references
 
@@ -67,13 +70,13 @@ Reads connector actions from the Power Platform Flow API.
 | **Base Resource URL** | `https://api.flow.microsoft.com` |
 | **Entra ID Resource URI** | `https://service.powerapps.com/` |
 
-![PowerShield APIFlow Connector Configuration](./media/ps_prereq_apiflow_connector.png)
+![Screenshot showing the PowerShield APIFlow connection reference configuration in the solution](./media/ps_prereq_apiflow_connector.png)
 
-*Figure 2: APIFlow connection reference*
+*APIFlow connection reference*
 
-![PowerShield APIFlow Connection Details](./media/ps_prereq_apiflow_conn.png)
+![Screenshot showing the APIFlow connection details with base resource URL and Entra ID resource URI](./media/ps_prereq_apiflow_conn.png)
 
-*Figure 3: APIFlow connection details*
+*APIFlow connection details*
 
 #### 2. PowerShield BAPAPI
 
@@ -86,13 +89,13 @@ Posts connector actions and manages DLP policies via the BAP API.
 | **Base Resource URL** | `https://api.bap.microsoft.com` |
 | **Entra ID Resource URI** | `https://api.bap.microsoft.com` |
 
-![PowerShield BAPAPI Connector Configuration](./media/ps_prereq_bapapi_connector.png)
+![Screenshot showing the PowerShield BAPAPI connection reference configuration in the solution](./media/ps_prereq_bapapi_connector.png)
 
-*Figure 4: BAPAPI connection reference*
+*BAPAPI connection reference*
 
-![PowerShield BAPAPI Connection Details](./media/ps_prereq_bapapi_conn.png)
+![Screenshot showing the BAPAPI connection details with base resource URL and Entra ID resource URI](./media/ps_prereq_bapapi_conn.png)
 
-*Figure 5: BAPAPI connection details*
+*BAPAPI connection details*
 
 ### Connector and Connector Actions sync
 
@@ -134,7 +137,10 @@ Makers can:
 
 ### Admin
 
-Requires the **PowerShield Admin** or **System Administrator** security role. Access PowerShield through the **Copilot Studio Kit for Admins** app (an **[Admin]** badge displays in the header).
+Requires the **CSK - Administrator** or **System Administrator** security role. Access PowerShield through the **Copilot Studio Kit for Admins** app (an **[Admin]** badge displays in the header).
+
+> [!IMPORTANT]
+> To approve requests and create DLP policies, admins also need the **Power Platform Administrator** role assigned in the [Microsoft 365 admin center](https://admin.microsoft.com). The Dataverse security role controls app access; the Power Platform Administrator role controls DLP policy operations.
 
 Admins can:
 
@@ -145,7 +151,8 @@ Admins can:
 - Manage [Connector Configurations](#connector-configurations), [Question Configuration](#question-configuration), and [Notification Settings](#notification-settings)
 - Post comments with file attachments on any request
 
-> **Note**: Users with the **System Administrator** role have access to both apps.
+> [!NOTE]
+> Users with the **System Administrator** role have access to both apps.
 
 ## Get started
 
@@ -160,15 +167,16 @@ Each app independently detects your assigned security roles. If you don't have a
 
 ## Maker workflow
 
+> [!NOTE]
 > All maker workflow takes place within the **Copilot Studio Kit for Makers** code app.
 
 ### Home screen (Maker view)
 
 The home screen provides an overview of your connector access requests.
 
-![Maker Home Screen](./media/ps_maker_home.png)
+![Screenshot of the PowerShield maker home screen showing stat cards and request grid](./media/ps_maker_home.png)
 
-*Figure 6: Maker home screen*
+*Maker home screen*
 
 **Header actions:** **+ New Request** (launch the wizard) and **Manage Service Trees**.
 
@@ -176,11 +184,9 @@ The home screen provides an overview of your connector access requests.
 
 **Request grid:** Lists your requests with status, service tree, environment container, connector counts, and submission date. Click a row for details. Use the row action menu (⋮) for quick **Clone** and **Withdraw** actions.
 
-![Maker Clone and Withdraw Menu](./media/ps_maker_clone_withdraw.png)
+![Screenshot showing the row action menu with Clone and Withdraw options](./media/ps_maker_clone_withdraw.png)
 
-*Figure 7: Row action menu*
-
----
+*Row action menu*
 
 ### Managing Service Trees
 
@@ -190,9 +196,9 @@ Service Trees represent organizational units, departments, or projects. Each req
 
 Navigate to **Manage Service Trees** from the home screen header. Click **Take a tour** for a guided walkthrough.
 
-![Service Tree Management](./media/ps_servicetrees_empty.png)
+![Screenshot of the Service Tree Management page with search and list view](./media/ps_servicetrees_empty.png)
 
-*Figure 8: Service Tree Management page*
+*Service Tree Management page*
 
 The page uses a two-level drill-down:
 
@@ -208,19 +214,20 @@ The page uses a two-level drill-down:
    - **Description** (optional)
    - **Members**: Paste a username (e.g., `user@domain.com`) and click **+ Add**. You're automatically the first member.
 
-![Create Service Tree Dialog](./media/ps_servicetree_create.png)
+![Screenshot of the Create New Service Tree dialog with name, organization, and members fields](./media/ps_servicetree_create.png)
 
-*Figure 9: Create New Service Tree dialog*
+*Create New Service Tree dialog*
 
-> **Note**: Only members of a Service Tree can see it and submit requests under it.
+> [!NOTE]
+> Only members of a Service Tree can see it and submit requests under it.
 
 #### Managing Environment Containers
 
 Environment Containers group Power Platform environments within a Service Tree. Navigate to a Service Tree's **Environment Containers** tab.
 
-![Environment Containers Empty State](./media/ps_servicetree_containers_empty.png)
+![Screenshot of the Environment Containers tab in empty state](./media/ps_servicetree_containers_empty.png)
 
-*Figure 10: Environment Containers tab (empty state)*
+*Environment Containers tab (empty state)*
 
 To create a container:
 
@@ -230,11 +237,9 @@ To create a container:
 4. Select one or more environments using checkboxes.
 5. Click **Save**.
 
-![Create Environment Container](./media/ps_servicetree_create_container.png)
+![Screenshot of the Create Environment Container dialog with environment selection grid](./media/ps_servicetree_create_container.png)
 
-*Figure 11: Create Environment Container dialog*
-
----
+*Create Environment Container dialog*
 
 ### Creating a new request (5-step wizard)
 
@@ -244,9 +249,9 @@ Click **+ New Request** on the home screen. The wizard guides you through five s
 
 Select the Service Tree and Environment Container for your request.
 
-![Wizard Step 1 - Environment Selection](./media/ps_step1_env_selection.png)
+![Screenshot of wizard Step 1 showing Service Tree and Environment Container selection panels](./media/ps_step1_env_selection.png)
 
-*Figure 12: Step 1 — Service Tree and Environment Container selection*
+*Step 1 — Service Tree and Environment Container selection*
 
 - **Left panel**: Select a Service Tree (only trees where you're a member). Create new ones inline with **+ New Service Tree**.
 - **Right panel**: Select a container. Edit existing containers or create new ones inline. The environments in the selected container display in a read-only table below.
@@ -256,51 +261,53 @@ Select the Service Tree and Environment Container for your request.
 - No in-progress conflict (another active request for the same Service Tree).
 - You must have the System Administrator role in each environment.
 
-> **Important**: Clicking **Next** validates your System Administrator role in each environment. Unauthorized environments are flagged in a dialog.
+> [!IMPORTANT]
+> Clicking **Next** validates your System Administrator role in each environment. Unauthorized environments are flagged in a dialog.
 
 #### Step 2: Compliance Questionnaire
 
-> **Note**: Skipped automatically when no questionnaire is configured by an admin.
+> [!NOTE]
+> Skipped automatically when no questionnaire is configured by an admin.
 
 Answer the compliance questions grouped by category. Supported types: Yes/No, Text, Single-select, Multi-select, and Date. Some questions may be conditional. Required questions are marked with an asterisk (*).
 
-![Wizard Step 2 - Questionnaire](./media/ps_step2_questionnaire.png)
+![Screenshot of wizard Step 2 showing the compliance questionnaire grouped by category](./media/ps_step2_questionnaire.png)
 
-*Figure 13: Step 2 — compliance questionnaire*
+*Step 2 — compliance questionnaire*
 
 #### Step 3: Connector Selection
 
 Select the connectors for your DLP policy. Filter by publisher, tier, release, and risk level.
 
-![Wizard Step 3 - Connector Selection](./media/ps_step3_connector_selection.png)
+![Screenshot of wizard Step 3 showing the connector selection grid with filters](./media/ps_step3_connector_selection.png)
 
-*Figure 14: Step 3 — connector selection grid*
+*Step 3 — connector selection grid*
 
 Use the **Hide Blocked** toggle to show or hide connectors blocked by an admin. Blocked connectors display a red "Blocked by Admin" badge and can't be selected (see [Connector Governance](#key-concepts)).
 
 **Connector Actions:** Click **View Connector Actions** on any connector to configure per-action Allow/Block rules. Use **Allow All** or **Block All** for bulk changes.
 
-![Connector Actions Dialog](./media/ps_step3_connector_actions.png)
+![Screenshot of the Connector Actions dialog showing per-action Allow and Block controls](./media/ps_step3_connector_actions.png)
 
-*Figure 15: Connector Actions dialog*
+*Connector Actions dialog*
 
 **Custom Connector Patterns:** Click **+ Add Custom Connectors** to define URL patterns (maximum 5 per request).
 
-![Custom Connector Patterns Dialog](./media/ps_step3_custom_patterns.png)
+![Screenshot of the Custom Connector Patterns dialog with URL pattern fields](./media/ps_step3_custom_patterns.png)
 
-*Figure 16: Custom Connector Patterns dialog*
+*Custom Connector Patterns dialog*
 
 **Confirm selections:** Clicking **Next** opens a confirmation dialog summarizing selected connectors, blocked actions, and custom patterns.
 
-![Confirm Connector Selections](./media/ps_step3_confirm_selections.png)
+![Screenshot of the confirmation dialog summarizing selected connectors and actions](./media/ps_step3_confirm_selections.png)
 
-*Figure 17: Confirm Connector Selections dialog*
+*Confirm Connector Selections dialog*
 
 #### Step 4: Business Justification
 
-![Wizard Step 4 - Justification](./media/ps_step4_justification.png)
+![Screenshot of wizard Step 4 showing business justification text area and document upload](./media/ps_step4_justification.png)
 
-*Figure 18: Step 4 — business justification*
+*Step 4 — business justification*
 
 - **Business justification** (required): 20-character minimum.
 - **Supporting Document** (optional): Single file (PDF, DOCX, XLSX, PNG, or JPG, max 25 MB).
@@ -309,27 +316,26 @@ Use the **Hide Blocked** toggle to show or hide connectors blocked by an admin. 
 
 Review your request across three tabs before submission.
 
-![Wizard Step 5 - Review](./media/ps_step5_review.png)
+![Screenshot of wizard Step 5 showing the Scope tab with environments and connectors](./media/ps_step5_review.png)
 
-*Figure 19: Step 5 — review (Scope tab)*
+*Step 5 — review (Scope tab)*
 
 - **Scope tab** — environments (with **Check DLP Membership** links), connectors (with expandable action rules), and custom patterns
 - **Details tab** — questionnaire answers, justification, and supporting document
 - **Collaboration tab** — add co-owners (maximum 20) who receive read/write access to this request
 
-![Wizard Step 5 - Co-owners](./media/ps_step5_coowners.png)
+![Screenshot of the Collaboration tab showing co-owner management](./media/ps_step5_coowners.png)
 
-*Figure 20: Collaboration tab — co-owner management*
+*Collaboration tab — co-owner management*
 
 Click **Submit Request ✓** to open the confirmation dialog, then **Submit ✓** to finalize. Submitted requests can't be edited.
 
-![Submission Confirmation](./media/ps_step5_submit_confirm.png)
+![Screenshot of the submission confirmation dialog](./media/ps_step5_submit_confirm.png)
 
-*Figure 21: Confirm Submission dialog*
+*Confirm Submission dialog*
 
-> **Note**: The **admin comment** (formal decision record on the Summary tab) is distinct from the **Comments thread** (ongoing discussion on the Comments tab).
-
----
+> [!NOTE]
+> The **admin comment** (formal decision record on the Summary tab) is distinct from the **Comments thread** (ongoing discussion on the Comments tab).
 
 ### Save Draft and Resume
 
@@ -339,9 +345,8 @@ Save your request as a draft at any wizard step and return later.
 - To resume: open the draft and click **Resume Draft**, or select the draft row on the home screen.
 - The wizard reopens at the step where you left off with all data restored.
 
-> **Note**: Drafts don't enforce full validation — you can save without completing required fields.
-
----
+> [!NOTE]
+> Drafts don't enforce full validation — you can save without completing required fields.
 
 ### Withdraw a request
 
@@ -350,8 +355,6 @@ Withdraw a request in **Draft** or **Submitted** status.
 1. Open the request detail view or use the row action menu (⋮).
 2. Click **Withdraw** and confirm.
 3. The request moves to **Withdrawn** status (read-only).
-
----
 
 ### Revise and resubmit
 
@@ -364,8 +367,6 @@ Revise a withdrawn request:
 
 The original withdrawn request remains unchanged for audit purposes.
 
----
-
 ### Clone a request
 
 Clone any request to create a new draft with the same configuration.
@@ -374,8 +375,6 @@ Clone any request to create a new draft with the same configuration.
 2. A new Draft request is created.
 
 **Copied:** Service Tree, Environment Container, environments, connectors (with action overrides), custom patterns, questionnaire answers, and justification. **Not copied:** co-owners and supporting documents.
-
----
 
 ### Request detail view (Maker)
 
@@ -391,8 +390,6 @@ Click any request row to view its details across two tabs:
 | Withdrawn | Revise & Resubmit |
 | All other statuses | Read-only |
 
----
-
 ### Comments and discussion
 
 Exchange messages with admins via the Comments tab after submission.
@@ -401,19 +398,18 @@ Exchange messages with admins via the Comments tab after submission.
 - Attach files (PDF, DOCX, XLSX, PNG, JPG, max 25 MB each) and preview them in-app.
 - Comments are **immutable** — they can't be edited or deleted, ensuring a reliable audit trail.
 
----
-
 ## Admin workflow
 
+> [!NOTE]
 > All admin workflow takes place within the **Copilot Studio Kit for Admins** code app.
 
 ### Home screen (Admin view)
 
 The admin home screen provides a tenant-wide view of all policy requests.
 
-![Admin Home Screen](./media/ps_admin_home.png)
+![Screenshot of the PowerShield admin home screen showing six stat cards and tenant-wide request grid](./media/ps_admin_home.png)
 
-*Figure 22: Admin home screen*
+*Admin home screen*
 
 **Stat cards:** Six cards — **All**, **Pending**, **Completed** (with approval rate), **Policy Failed**, **Rejected**, **Withdrawn**. Click a card to filter the grid.
 
@@ -421,15 +417,13 @@ The admin home screen provides a tenant-wide view of all policy requests.
 
 **Admin grid:** Displays all tenant requests with the same columns as the maker grid, plus **Created By** and **Assigned Admin**.
 
----
-
 ### Settings Hub
 
 Click the gear (⚙) icon on the admin home screen to configure PowerShield before processing requests.
 
-![Settings Hub](./media/ps_admin_settings_hub.png)
+![Screenshot of the Settings Hub with Connector Configurations, Question Configurations, and Notification Settings cards](./media/ps_admin_settings_hub.png)
 
-*Figure 23: Settings Hub*
+*Settings Hub*
 
 Three configuration areas:
 
@@ -439,35 +433,32 @@ Three configuration areas:
 | **Question Configurations** | Configure the compliance questionnaire |
 | **Notification Settings** | Configure email notification delivery |
 
----
-
 ### Connector Configurations
 
 Browse and manage all connectors synced from your Power Platform environment. Blocking and unblocking changes apply **immediately** — no sync required.
 
-> **Note:** Non-Microsoft connectors are [blocked by default](#key-concepts). Use this screen to selectively unblock connectors for maker requests.
+> [!NOTE]
+> Non-Microsoft connectors are [blocked by default](#key-concepts). Use this screen to selectively unblock connectors for maker requests.
 
-![Connector Configurations](./media/ps_admin_configure_connectors.png)
+![Screenshot of the Connector Configurations page showing the connector list with block and risk level controls](./media/ps_admin_configure_connectors.png)
 
-*Figure 24: Connector Configurations*
+*Connector Configurations*
 
 **Toolbar:** View details and actions, Block, Unblock, Set risk level, Show blocked toggle, Search.
 
 **Connector detail panel:** Click a connector to view metadata (key, category, release tag, sync date, description) and manage individual **Connector Actions** with per-action Block/Unblock controls.
 
-![Connector Detail Panel](./media/ps_admin_configure_connectors_actions.png)
+![Screenshot of the connector detail panel showing metadata and per-action controls](./media/ps_admin_configure_connectors_actions.png)
 
-*Figure 25: Connector detail panel*
-
----
+*Connector detail panel*
 
 ### Question Configuration
 
 Manage the compliance questionnaire that appears in the maker's wizard (Step 2).
 
-![Question Configuration](./media/ps_admin_settings_questions.png)
+![Screenshot of the Question Configuration page with Categories and Questions tabs](./media/ps_admin_settings_questions.png)
 
-*Figure 26: Question Configuration*
+*Question Configuration*
 
 The interface has two tabs:
 
@@ -476,17 +467,16 @@ The interface has two tabs:
 
 For Choice and MultiselectChoice questions, define answer options with **+ New Option**.
 
-> **Note**: The kit ships without question data. Click **Take a tour** for a guided walkthrough.
-
----
+> [!NOTE]
+> The kit ships without question data. Click **Take a tour** for a guided walkthrough.
 
 ### Notification Settings
 
 Configure email notification delivery.
 
-![Notification Settings](./media/ps_notification_settings.png)
+![Screenshot of the Notification Settings page with sender email and distribution list fields](./media/ps_notification_settings.png)
 
-*Figure 27: Notification Settings*
+*Notification Settings*
 
 | Setting | Description | Required |
 |---------|-------------|----------|
@@ -495,9 +485,8 @@ Configure email notification delivery.
 | **PowerShield App URL** | Full app URL for deep links in emails | No |
 | **Notifications Enabled** | Enable or disable all email notifications | — |
 
-> **Important**: Without the Sender Email Address configured, all email notifications silently fail. Ensure server-side synchronization is enabled for the sender mailbox in Exchange Online.
-
----
+> [!IMPORTANT]
+> Without the Sender Email Address configured, all email notifications silently fail. Ensure server-side synchronization is enabled for the sender mailbox in Exchange Online.
 
 ### Reviewing a request (Admin)
 
@@ -513,9 +502,9 @@ The admin detail view has five tabs:
 
 Click **Assign to Me** on a **Submitted** request to move it to **Under Review**, signaling to other admins that you're reviewing it.
 
-![Assign Request Dialog](./media/ps_admin_assign_request.png)
+![Screenshot of the Assign to Me confirmation dialog with Power Platform Administrator role reminder](./media/ps_admin_assign_request.png)
 
-*Figure 28: Assign Request dialog*
+*Assign Request dialog*
 
 #### Approve a request
 
@@ -531,21 +520,24 @@ Approval uses a **2-step wizard** for requests in **Submitted** or **Under Revie
    - **Post-submission blocked connectors** — warning that these connectors will be excluded.
 3. Click **Next →** to proceed.
 
-![Review & Approve Dialog - Step 1](./media/ps_admin_review_approve.png)
+![Screenshot of the approval dialog Step 1 showing DLP Policy Impact pre-flight check results](./media/ps_admin_review_approve.png)
 
-*Figure 29: Approval Step 1 — DLP Policy Impact*
+*Approval Step 1 — DLP Policy Impact*
 
 **Step 2 — Confirmation:**
 
-![Review & Approve Dialog - Step 2](./media/ps_admin_approve_confirm.png)
+![Screenshot of the approval dialog Step 2 showing the confirmation warning and admin comment field](./media/ps_admin_approve_confirm.png)
 
-*Figure 30: Approval Step 2 — confirmation*
+*Approval Step 2 — confirmation*
 
 4. Review the warning: approving creates an immediate, irreversible DLP policy (reversible only via the Power Platform Admin Center).
 5. Enter a required **Admin comment**.
 6. Click **Confirm Approve**.
 
 After approval, PowerShield automatically sets the status to **Implementing**, resolves DLP conflicts, creates the scoped policy, and updates to **Implemented** (or **Policy Failed** on error).
+
+> [!NOTE]
+> DLP policy creation requires the approving admin to have the **Power Platform Administrator** role. If the role is missing, the request transitions to **Policy Failed** status with a permission error. See [Troubleshooting](#troubleshooting) for resolution steps.
 
 #### Reject a request
 
@@ -557,11 +549,9 @@ After approval, PowerShield automatically sets the status to **Implementing**, r
 
 After approval, this tab shows the DLP policy name, policy ID (with copy buttons), and per-environment fulfillment status.
 
-![Fulfillment Tab](./media/ps_admin_fulfillment_tab.png)
+![Screenshot of the Fulfillment tab showing DLP policy name, policy ID, and per-environment status](./media/ps_admin_fulfillment_tab.png)
 
-*Figure 31: Fulfillment tab*
-
----
+*Fulfillment tab*
 
 ## Request status lifecycle
 
@@ -601,8 +591,6 @@ After approval, this tab shows the DLP policy name, policy ID (with copy buttons
 
 Only one active request per Service Tree at a time. A new request is blocked if an existing request has status: Draft, Submitted, UnderReview, Approved, Implementing, or AutoRejected. Terminal statuses (Withdrawn, Rejected, Implemented, ImplementedWithErrors) don't block new requests.
 
----
-
 ## Reference: Key Dataverse tables
 
 All tables use the `cat_` publisher prefix.
@@ -640,8 +628,6 @@ All tables use the `cat_` publisher prefix.
 | `cat_powershieldservicetreemembers` | Service Tree membership |
 | `cat_powershieldsettings` | Key-value notification configuration |
 
----
-
 ## Troubleshooting
 
 **"No environments available" in the wizard**
@@ -659,12 +645,19 @@ All tables use the `cat_` publisher prefix.
 
 - Check the **Activity** tab (admin only) for error details.
 - Verify the PowerShield BAPAPI connection is active.
-- Ensure the approving admin has Power Platform Admin permissions.
+- Ensure the approving admin has the **Power Platform Administrator** role assigned in the [Microsoft 365 admin center](https://admin.microsoft.com). DLP policy write operations (create, update, delete) require this Entra ID role.
 - If fulfillment failed, the status may transition to **Policy Failed** — review error details and retry.
+
+**DLP policy creation failed — permission error**
+
+- The approving admin doesn't have the **Power Platform Administrator** role.
+- This Entra ID role is required for DLP policy write operations (create, update, delete). Read operations (listing existing policies during the approval pre-flight check) succeed without it.
+- Ask your IT admin to assign the Power Platform Administrator role in the [Microsoft 365 admin center](https://admin.microsoft.com).
+- After the role is assigned, open the failed request and select **Retry DLP Creation** to re-run fulfillment.
 
 **Cannot see the Settings Hub or admin configuration screens**
 
-- Requires the **PowerShield Admin** security role. Contact your Dataverse administrator.
+- Requires the **CSK - Administrator** security role. Contact your Dataverse administrator.
 
 **Connector icons not loading**
 
