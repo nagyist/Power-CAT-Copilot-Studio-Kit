@@ -14,8 +14,9 @@ PowerShield enables organizations to manage Power Platform connector access thro
 
 ## Architecture
 
-PowerShield is delivered as an embedded feature within two dedicated code apps:
+PowerShield is delivered as an embedded feature within two dedicated code apps and is also accessible from the model-driven app:
 
+- **Copilot Studio Kit** (model-driven app) — launches PowerShield and routes to the appropriate code app based on the user's security role
 - **Copilot Studio Kit for Makers** — submit and manage connector access requests
 - **Copilot Studio Kit for Admins** — review, approve, and configure PowerShield
 
