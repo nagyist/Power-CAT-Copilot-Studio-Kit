@@ -49,6 +49,29 @@ Before using PowerShield, ensure you have:
 > [!NOTE]
 > Developer environments are automatically excluded from PowerShield. Only Production, Sandbox, Trial, Default, and Teams environments are available.
 
+### Environment variable
+
+PowerShield requires one environment variable to be configured before cloud flows can manage DLP policies.
+
+#### PowerShield Tenant ID
+
+The **PowerShield Tenant ID** environment variable stores your Microsoft Entra tenant GUID. Cloud flows use this value to construct API calls to the Power Platform governance endpoint (for example, `https://api.bap.microsoft.com/providers/PowerPlatform.Governance/v1/tenants/{tenantId}/policies/...`).
+
+**To configure the environment variable:**
+
+1. Open the [Power Apps maker portal](https://make.powerapps.com) and select your environment.
+2. Navigate to **Solutions > Default Solution > Environment variables**.
+3. Locate **PowerShield Tenant ID** (`cat_PowerShieldTenantID`).
+4. Select the variable, then enter your tenant GUID in the **Current Value** field.
+5. Select **Save**.
+
+![Screenshot showing the PowerShield Tenant ID environment variable configuration in the Default Solution](./media/ps_prereq_tenant_env_variable.png)
+
+*PowerShield Tenant ID environment variable*
+
+> [!TIP]
+> To find your Tenant ID, sign in to [Power Apps](https://make.powerapps.com), select the **Settings** (gear) icon on the command bar, and then select **Session details**. The **Tenant ID** is displayed in the session details dialog. For more information, see [Get session and app ID details](https://learn.microsoft.com/power-apps/maker/canvas-apps/get-sessionid).
+
 ### Connection references
 
 PowerShield uses two **HTTP with Microsoft Entra ID (preauthorized)** connection references shared across both code apps for environment discovery and DLP policy management.
@@ -91,29 +114,6 @@ Posts connector actions and manages DLP policies via the BAP API.
 ![Screenshot showing the BAPAPI connection details with base resource URL and Entra ID resource URI](./media/ps_prereq_bapapi_conn.png)
 
 *BAPAPI connection details*
-
-### Environment variable
-
-PowerShield requires one environment variable to be configured before cloud flows can manage DLP policies.
-
-#### PowerShield Tenant ID
-
-The **PowerShield Tenant ID** environment variable stores your Microsoft Entra tenant GUID. Cloud flows use this value to construct API calls to the Power Platform governance endpoint (for example, `https://api.bap.microsoft.com/providers/PowerPlatform.Governance/v1/tenants/{tenantId}/policies/...`).
-
-**To configure the environment variable:**
-
-1. Open the [Power Apps maker portal](https://make.powerapps.com) and select your environment.
-2. Navigate to **Solutions > Default Solution > Environment variables**.
-3. Locate **PowerShield Tenant ID** (`cat_PowerShieldTenantID`).
-4. Select the variable, then enter your tenant GUID in the **Current Value** field.
-5. Select **Save**.
-
-![Screenshot showing the PowerShield Tenant ID environment variable configuration in the Default Solution](./media/ps_prereq_tenant_env_variable.png)
-
-*PowerShield Tenant ID environment variable*
-
-> [!TIP]
-> To find your Tenant ID, sign in to [Power Apps](https://make.powerapps.com), select the **Settings** (gear) icon on the command bar, and then select **Session details**. The **Tenant ID** is displayed in the session details dialog. For more information, see [Get session and app ID details](https://learn.microsoft.com/power-apps/maker/canvas-apps/get-sessionid).
 
 ### Connector and Connector Actions sync
 
