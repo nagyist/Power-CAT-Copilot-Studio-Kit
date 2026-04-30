@@ -69,6 +69,13 @@ Agent Review Tool is a solution analysis tool that can be used to review your ag
 
 More information on [Agent Review Tool](./AGENT_REVIEW_TOOL.md)
 
+## PowerShield
+PowerShield enables organizations using the Power Platform to manage connector access through a structured, approval-based workflow for Data Loss Prevention (DLP) policies. It provides a self-service experience for makers to request connector access via a guided 5-step wizard, and a review interface for administrators to approve, reject, or manage those requests. Every DLP policy change is traceable to a PowerShield request, ensuring governance compliance and auditability.
+
+Administrators can configure blocked connectors, compliance questionnaires, and notification settings, while makers create requests scoped to Service Trees and Environment Containers. PowerShield automatically handles DLP policy creation, conflict resolution with existing policies, and per-environment fulfillment tracking.
+
+More information on [PowerShield](./POWER_SHIELD.md)
+
 ## Conversation Analyzer
 Conversation Analyzer allows makers to analyze the conversations of their custom agents using custom prompts to get additional insights.
 
