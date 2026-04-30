@@ -19,7 +19,7 @@ PowerShield is delivered as an embedded feature within two dedicated code apps:
 - **Copilot Studio Kit for Makers** — submit and manage connector access requests
 - **Copilot Studio Kit for Admins** — review, approve, and configure PowerShield
 
-This two-app architecture isolates connector consent per persona. Makers consent only to `Microsoft Dataverse` and `Power Apps for Makers` — never the elevated `Power Platform for Admins` connector. This eliminates adoption barriers in organizations that restrict admin-level connectors. Both apps share the same Dataverse tables with no data duplication.
+
 
 ## Key concepts
 
