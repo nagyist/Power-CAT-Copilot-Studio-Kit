@@ -106,13 +106,6 @@ PowerShield requires one environment variable to be configured before cloud flow
 
 The **PowerShield Tenant ID** environment variable stores your Microsoft Entra tenant GUID. Cloud flows use this value to construct API calls to the Power Platform governance endpoint (for example, `https://api.bap.microsoft.com/providers/PowerPlatform.Governance/v1/tenants/{tenantId}/policies/...`).
 
-| Setting | Value |
-|---------|-------|
-| **Display Name** | PowerShield Tenant ID |
-| **Name** | `cat_PowerShieldTenantID` |
-| **Data Type** | Text |
-| **Description** | Tenant GUID |
-
 **To configure the environment variable:**
 
 1. Open the [Power Apps maker portal](https://make.powerapps.com) and select your environment.
