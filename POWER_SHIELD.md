@@ -95,12 +95,21 @@ Create two HTTP with Microsoft Entra ID (preauthorized) connections in your envi
    | **Microsoft Entra ID Resource URI** | `https://service.powerapps.com/` |
 
 6. Select **Create** and complete the sign-in prompt.
+
+![Screenshot showing the APIFlow connection details with base resource URL and Entra ID resource URI](./media/ps_prereq_apiflow_conn.png)
+
+*APIFlow connection details*
+
 7. Repeat steps 3–6 to create the **second connection** (used by the PowerShield BAPAPI connection reference) with the following values:
 
    | Setting | Value |
    |---------|-------|
    | **Base Resource URL** | `https://api.bap.microsoft.com` |
    | **Microsoft Entra ID Resource URI** | `https://api.bap.microsoft.com` |
+
+![Screenshot showing the BAPAPI connection details with base resource URL and Entra ID resource URI](./media/ps_prereq_bapapi_conn.png)
+
+*BAPAPI connection details*
 
 > [!NOTE]
 > You must sign in with an account that has the **Power Platform Administrator** role for the BAPAPI connection, because the associated cloud flows create and manage DLP policies.
@@ -122,10 +131,6 @@ After you create both connections, associate them with the solution's connection
 
 *PowerShield APIFlow connection reference*
 
-![Screenshot showing the APIFlow connection details with base resource URL and Entra ID resource URI](./media/ps_prereq_apiflow_conn.png)
-
-*APIFlow connection details*
-
 7. Select **PowerShield BAPAPI** to open the details pane.
 8. In the **Connection** dropdown, select the connection you created with the `https://api.bap.microsoft.com` Base Resource URL.
 9. Select **Save**.
@@ -133,10 +138,6 @@ After you create both connections, associate them with the solution's connection
 ![Screenshot showing the PowerShield BAPAPI connection reference configuration in the solution](./media/ps_prereq_bapapi_connector.png)
 
 *PowerShield BAPAPI connection reference*
-
-![Screenshot showing the BAPAPI connection details with base resource URL and Entra ID resource URI](./media/ps_prereq_bapapi_conn.png)
-
-*BAPAPI connection details*
 
 For more information about connection references, see [Use a connection reference in a solution](https://learn.microsoft.com/power-apps/maker/data-platform/create-connection-reference).
 
