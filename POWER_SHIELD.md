@@ -156,14 +156,47 @@ Admins can:
 
 ## Get started
 
-### Accessing PowerShield
+### Launch options
 
-In each app, navigate to the **Governance** section in the left sidebar and select **Power Shield**.
+PowerShield is accessible from three apps within the Copilot Studio Kit solution. Choose the launch option that matches your role and workflow.
 
-- **Makers** open **Copilot Studio Kit for Makers** — the sidebar also includes Component Library, Webchat Playground, Advanced Testing, etc.
-- **Admins** open **Copilot Studio Kit for Admins** — the sidebar also includes Agent Inventory, Conversation KPIs, Conversation Analyzer, Compliance Hub, etc.
+| App | Type | Audience | Internal name |
+|-----|------|----------|---------------|
+| Copilot Studio Kit | Model-Driven App | All users (auto-routes by role) | `cat_CopilotStudioAccelerator` |
+| Copilot Studio Kit for Admins | Code App | Admins | `cat_copilotstudiokitforadmins` |
+| Copilot Studio Kit for Makers | Code App | Makers | `cat_copilotstudiokitformakers` |
 
-Each app independently detects your assigned security roles. If you don't have a recognized role, an "Unauthorized" screen displays with instructions to contact your administrator.
+#### Option A: Launch from the Copilot Studio Kit model-driven app
+
+This option is recommended for organizations that use the Copilot Studio Kit model-driven app as the central hub.
+
+1. Open the **Copilot Studio Kit** model-driven app.
+2. In the left navigation, expand the **Governance** area.
+3. Select **PowerShield**.
+4. The unified launcher detects your security role and routes you to the appropriate code app:
+   - Users with the **CSK - Administrator** or **System Administrator** role are redirected to **Copilot Studio Kit for Admins**.
+   - Users with the **CSK - Maker** role are redirected to **Copilot Studio Kit for Makers**.
+   - If a user has both admin and maker roles, the admin app takes precedence.
+
+#### Option B: Launch from Copilot Studio Kit for Admins
+
+Use this option when you manage connector access requests directly in the admin code app.
+
+1. Open the **Copilot Studio Kit for Admins** code app.
+2. In the left sidebar, navigate to the **Governance** section.
+3. Select **Power Shield**.
+
+The admin experience includes request review, approval workflows, connector configurations, question configuration, and notification settings.
+
+#### Option C: Launch from Copilot Studio Kit for Makers
+
+Use this option when you submit connector access requests directly in the maker code app.
+
+1. Open the **Copilot Studio Kit for Makers** code app.
+2. In the left sidebar, navigate to the **Governance** section.
+3. Select **Power Shield**.
+
+The maker experience includes request creation via the 5-step wizard, service tree management, and request tracking.
 
 ## Maker workflow
 
