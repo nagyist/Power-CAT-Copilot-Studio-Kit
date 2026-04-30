@@ -119,7 +119,7 @@ The **PowerShield Tenant ID** environment variable stores your Microsoft Entra t
 *PowerShield Tenant ID environment variable*
 
 > [!TIP]
-> To find your Tenant ID, open the [Microsoft Entra admin center](https://entra.microsoft.com) and navigate to **Identity > Overview**. The **Tenant ID** is displayed on the Overview page.
+> To find your Tenant ID, sign in to [Power Apps](https://make.powerapps.com), select the **Settings** (gear) icon on the command bar, and then select **Session details**. The **Tenant ID** is displayed in the session details dialog. For more information, see [Get session and app ID details](https://learn.microsoft.com/power-apps/maker/canvas-apps/get-sessionid).
 
 ### Connector and Connector Actions sync
 
