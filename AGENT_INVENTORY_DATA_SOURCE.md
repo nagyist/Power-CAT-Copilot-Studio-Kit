@@ -90,21 +90,23 @@ Agents which are not accessible within the environment are added using One Inven
 | 58 | First Usage Feature | cat_firstusagefeature | Text | Usage metrics data available in Power Platform Admin Center | Usage metrics data available in Power Platform Admin Center | V3 | Represents the first feature used within the agent, based on usage metrics available in the system. Currently supports a maximum look‑back of 180 days. |
 | 59 | Last Usage Date | cat_lastusagedate | Date | Agent last usage date from the usage metrics data from power platform admin center | Agent last usage date from the usage metrics data from power platform admin center | V3 | Agent last usage date from the usage metrics data from power platform admin center |
 | 60 | Last Usage Feature | cat_lastusagefeature | Text | Agent last usage feature from the usage metrics data from power platform admin center | Agent last usage feature from the usage metrics data from power platform admin center | V3 | Agent last usage feature from the usage metrics data from power platform admin center |
-| 61 | Usage Agent Action (Billed) | cat_usageagentactionbilled | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent. |
-| 62 | Usage Agent Action (Non-Billed) | cat_usageagentactionnonbilled | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
-| 63 | Usage Agent Flow Actions (Billed) | cat_usageagentflowactionsbilled | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
-| 64 | Usage Agent Flow Actions (Non-Billed) | cat_usageagentflowactionsnonbilled | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
-| 65 | Usage Classic Answer (Billed) | cat_usageclassicanswerbilled | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
-| 66 | Usage Classic Answer (Non-Billed) | cat_usageclassicanswernonbilled | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
-| 67 | Usage Generative Answer (Billed) | cat_usagegenerativeanswerbilled | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
-| 68 | Usage Generative Answer (Non-Billed) | cat_usagegenerativeanswernonbilled | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
-| 69 | Usage Text And Gen AI Tools Basic (Billed) | cat_usagetextandgenaitoolsbasicbilled | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
-| 70 | Usage Text And Gen AI Tools Basic (Non-Billed) | cat_usagetextandgenaitoolsbasicnonbilled | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
-| 71 | Usage Text And Gen AI Tools Premium (Billed) | cat_usagetextandgenaitoolspremiumbilled | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
-| 72 | Usage Text And Gen AI Tools Premium (Non-Billed) | cat_usagetextandgenaitoolspremiumnonbilled | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
-| 73 | Usage Text And Gen AI Tools Standard (Billed) | cat_usagetextandgenaitoolsstandardbilled | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
-| 74 | Usage Text And Gen AI Tools Standard (Non-Billed) | cat_usagetextandgenaitoolsstandardnonbilled | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
+| 61 | Usage Agent Action (Billed) | cat_usageagentactionbilledcredits | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent. |
+| 62 | Usage Agent Action (Non-Billed) | cat_usageagentactionnonbilledcredits | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
+| 63 | Usage Agent Flow Actions (Billed) | cat_usageagentflowactionsbilledcredits | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
+| 64 | Usage Agent Flow Actions (Non-Billed) | cat_usageagentflowactionsnonbilledcredits | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
+| 65 | Usage Classic Answer (Billed) | cat_usageclassicanswerbilledcredits | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
+| 66 | Usage Classic Answer (Non-Billed) | cat_usageclassicanswernonbilledcredits | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
+| 67 | Usage Generative Answer (Billed) | cat_usagegenerativeanswerbilledcredits | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
+| 68 | Usage Generative Answer (Non-Billed) | cat_usagegenerativeanswernonbillcredits | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
+| 69 | Usage Text And Gen AI Tools Basic (Billed) | cat_usagetextgenaitoolsbasicbillcredits | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
+| 70 | Usage Text And Gen AI Tools Basic (Non-Billed) | cat_usagetextgenaitoolsbasicnonbillcredits | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
+| 71 | Usage Text And Gen AI Tools Premium (Billed) | cat_usagetextgenaitoolspremiumbillcredits | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
+| 72 | Usage Text And Gen AI Tools Premium (Non-Billed) | cat_usagetextgenaitoolspremiumnonbillcredits | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
+| 73 | Usage Text And Gen AI Tools Standard (Billed) | cat_usagetextgenaitoolsstandardbillcredits | Whole Number | Agent billed usage from the usage metrics data from power platform admin center | Agent billed usage from the usage metrics data from power platform admin center | V3 | Represents the billing message associated with the feature utilized by the agent |
+| 74 | Usage Text And Gen AI Tools Standard (Non-Billed) | cat_usagetextgenaitoolsstandardnonbillcredits | Whole Number | Agent non billed usage from the usage metrics data from power platform admin center | Agent non billed usage from the usage metrics data from power platform admin center | V3 | Represents the non billing message for the feature utilized by the agent |
 | 75 | Usage Data | cat_usagedata | Multiline Text | Agent usage data from the power platform admin center as json | Agent usage data from the power platform admin center as json | V3 | Agent usage data in json |
+| 76 | Agent Owner | cat_agentowner | Text | Dataverse: `systemuser` table → owner name; if owner is Teams then `team` table → team name | | V5 | Name of the agent's owner. |
+| 77 | Agent Owner Email | cat_agentowneremail | Text | Dataverse: `systemuser` table → owner email; if owner is Teams then `team` table → team email | | V5 | Email address of the agent's owner. |
 
 ---
 
@@ -162,20 +164,20 @@ Below are concise detection rules for each derived or boolean field (refer to lo
 - Last Usage Date (`cat_lastusagedate`): last usage date from usage metrics in Power Platform Admin Center.
 - Last Usage Feature (`cat_lastusagefeature`): last usage feature from usage metrics in Power Platform Admin Center.
 - Template (`cat_template`): `bot` table → identifies template and version used for bot default content.
-- Usage Agent Action (Billed) (`cat_usageagentactionbilled`): agent billed usage from usage metrics in Power Platform Admin Center.
-- Usage Agent Flow Actions (Billed) (`cat_usageagentflowactionsbilled`): agent billed usage from usage metrics in Power Platform Admin Center.
-- Usage Classic Answer (Billed) (`cat_usageclassicanswerbilled`): agent billed usage from usage metrics in Power Platform Admin Center.
-- Usage Generative Answer (Billed) (`cat_usagegenerativeanswerbilled`): agent billed usage from usage metrics in Power Platform Admin Center.
-- Usage Text And GenAI Tools Basic (Billed) (`cat_usagetextandgenaitoolsbasicbilled`): agent billed usage from usage metrics in Power Platform Admin Center.
-- Usage Text And GenAI Tools Premium (Billed) (`cat_usagetextandgenaitoolspremiumbilled`): agent billed usage from usage metrics in Power Platform Admin Center.
-- Usage Text And GenAI Tools Standard (Billed) (`cat_usagetextandgenaitoolsstandardbilled`): agent billed usage from usage metrics in Power Platform Admin Center.
-- Usage Agent Action (Non-Billed) (`cat_usageagentactionnonbilled`): agent non-billed usage from usage metrics in Power Platform Admin Center.
-- Usage Agent Flow Actions (Non-Billed) (`cat_usageagentflowactionsnonbilled`): agent non-billed usage from usage metrics in Power Platform Admin Center.
-- Usage Classic Answer (Non-Billed) (`cat_usageclassicanswernonbilled`): agent non-billed usage from usage metrics in Power Platform Admin Center.
-- Usage Generative Answer (Non-Billed) (`cat_usagegenerativeanswernonbilled`): agent non-billed usage from usage metrics in Power Platform Admin Center.
-- Usage Text And GenAI Tools Basic (Non-Billed) (`cat_usagetextandgenaitoolsbasicnonbilled`): agent non-billed usage from usage metrics in Power Platform Admin Center.
-- Usage Text And GenAI Tools Premium (Non-Billed) (`cat_usagetextandgenaitoolspremiumnonbilled`): agent non-billed usage from usage metrics in Power Platform Admin Center.
-- Usage Text And GenAI Tools Standard (Non-Billed) (`cat_usagetextandgenaitoolsstandardnonbilled`): agent non-billed usage from usage metrics in Power Platform Admin Center.
+- Usage Agent Action (Billed) (`cat_usageagentactionbilledcredits`): agent billed usage from usage metrics in Power Platform Admin Center.
+- Usage Agent Flow Actions (Billed) (`cat_usageagentflowactionsbilledcredits`): agent billed usage from usage metrics in Power Platform Admin Center.
+- Usage Classic Answer (Billed) (`cat_usageclassicanswerbilledcredits`): agent billed usage from usage metrics in Power Platform Admin Center.
+- Usage Generative Answer (Billed) (`cat_usagegenerativeanswerbilledcredits`): agent billed usage from usage metrics in Power Platform Admin Center.
+- Usage Text And GenAI Tools Basic (Billed) (`cat_usagetextgenaitoolsbasicbillcredits`): agent billed usage from usage metrics in Power Platform Admin Center.
+- Usage Text And GenAI Tools Premium (Billed) (`cat_usagetextgenaitoolspremiumbillcredits`): agent billed usage from usage metrics in Power Platform Admin Center.
+- Usage Text And GenAI Tools Standard (Billed) (`cat_usagetextgenaitoolsstandardbillcredits`): agent billed usage from usage metrics in Power Platform Admin Center.
+- Usage Agent Action (Non-Billed) (`cat_usageagentactionnonbilledcredits`): agent non-billed usage from usage metrics in Power Platform Admin Center.
+- Usage Agent Flow Actions (Non-Billed) (`cat_usageagentflowactionsnonbilledcredits`): agent non-billed usage from usage metrics in Power Platform Admin Center.
+- Usage Classic Answer (Non-Billed) (`cat_usageclassicanswernonbilledcredits`): agent non-billed usage from usage metrics in Power Platform Admin Center.
+- Usage Generative Answer (Non-Billed) (`cat_usagegenerativeanswernonbillcredits`): agent non-billed usage from usage metrics in Power Platform Admin Center.
+- Usage Text And GenAI Tools Basic (Non-Billed) (`cat_usagetextgenaitoolsbasicnonbillcredits`): agent non-billed usage from usage metrics in Power Platform Admin Center.
+- Usage Text And GenAI Tools Premium (Non-Billed) (`cat_usagetextgenaitoolspremiumnonbillcredits`): agent non-billed usage from usage metrics in Power Platform Admin Center.
+- Usage Text And GenAI Tools Standard (Non-Billed) (`cat_usagetextgenaitoolsstandardnonbillcredits`): agent non-billed usage from usage metrics in Power Platform Admin Center.
 - UsageData (`cat_usagedata`): agent usage from usage metrics in Power Platform Admin Center as json.
 - Agent Created by UPN (`cat_agentcreatedbyupn`): `systemuser` table → domainname of the user who created the agent.
 - First Usage Date (`cat_firstusagedate`): first usage date from usage metrics in Power Platform Admin Center. Currently supports a maximum look-back of 180 days.
@@ -188,6 +190,8 @@ Below are concise detection rules for each derived or boolean field (refer to lo
 - HasSysAdminAccess (`cat_hassysadminaccesscode`): true if the agent is accessible within the environment to fetch data for agent inventory.
 - Location (`cat_location`): location of the agent (environment region).
 - Model (`cat_model`): model the agent is using.
+- Agent Owner (`cat_agentowner`): fetched from `systemuser` table for the agent owner; if the owner is a team, fetched from `team` table.
+- Agent Owner Email (`cat_agentowneremail`): fetched from `systemuser` table for the agent owner; if the owner is a team, fetched from `team` table.
 
 ---
 
@@ -196,17 +200,24 @@ Below are concise detection rules for each derived or boolean field (refer to lo
 Overview
 --------
 
-This section documents the Agent Usage History table (`cat_agentusagehistory`) in Dataverse. It captures per-agent, per-feature, per-day usage metrics sourced from the Power Platform Admin Center.
+This section documents the Agent Usage History table (`cat_agentusagehistory`) in Dataverse. It captures per-agent, per-feature, weekly usage metrics sourced from the Power Platform Admin Center.
 
 | No | Column Name | Column Logical Name | Data Type | Source | Version | Description |
 |---:|---|---|---|---:|:--:|---|
 | 1 | Agent | cat_agent | Lookup | Derived: matched using `Resource Id` against Agent Details | | Lookup reference to the Agent Details record. |
 | 2 | Agent ID | cat_agentid | Text | PPAC usage report → `Resource Id` column | | Unique identifier for the agent (botid). |
-| 3 | Billed Copilot Credits | cat_billedcopilotcredits | Decimal | PPAC usage report → `Billed messages` column | | Billed copilot credits consumed by the agent. |
+| 3 | Billed Copilot Credits | cat_billedcopilotcredits | Decimal | PPAC usage report → `consumed` column | | Billed copilot credits consumed by the agent. |
 | 4 | Environment ID | cat_environmentid | Text | PPAC usage report → `Environment Id` column | | Unique identifier for the environment. |
-| 5 | Feature Name | cat_featurename | Text | PPAC usage report → `Feature` column | | Name of the feature used by the agent. |
-| 6 | Non-billed Copilot Credits | cat_nonbilledcopilotcredits | Decimal | PPAC usage report → `Non-billed messages` column | | Non-billed copilot credits for the agent. |
+| 5 | Feature Name | cat_featurename | Text | PPAC usage report → `FeatureName` column | | Name of the feature used by the agent. |
+| 6 | Non-billed Copilot Credits | cat_nonbilledcopilotcredits | Decimal | PPAC usage report → `NonBillableQuantity` column | | Non-billed copilot credits for the agent. |
 | 7 | Usage Date | cat_usagedate | DateTime | PPAC usage report → `Usage Date` column | | Date of the usage record. |
+| 8 | Channel Id | cat_channelid | Text | PPAC usage report → `ChannelId` column | | Identifier of the channel through which the agent interaction occurred. |
+| 9 | Knowledge Sources | cat_knowldgesources | Text | PPAC usage report → `KnowledgeSources` column | | Knowledge sources referenced or utilized during the agent's usage session. |
+| 10 | Users | cat_users | Text | PPAC usage report → `Users` column | | Users who interacted with the agent during the usage period. |
+| 11 | Tool Invoked | cat_toolinvoked | Text | PPAC usage report → `ToolInvoked` column | | Tools or actions invoked by the agent during the usage session. |
+| 12 | From Date | cat_fromdate | DateTime |  | | Start date of the week for which the agent usage was fetched. |
+| 13 | To Date | cat_todate | DateTime |  | | End date of the week for which the agent usage was fetched. |
+| 14 | LLM Model | cat_llmmodel | Text | PPAC usage report → `LLMModel` column | | The large language model used by the agent during the usage session. |
 
 ---
 
@@ -216,10 +227,17 @@ Below are concise detection rules for each field in the Agent Usage History tabl
 
 - Agent (`cat_agent`): Derived — matched using PPAC report `Resource Id` against Agent Details records.
 - Agent ID (`cat_agentid`): PPAC usage report → `Resource Id`.
-- Billed Copilot Credits (`cat_billedcopilotcredits`): PPAC usage report → `Billed messages`.
+- Billed Copilot Credits (`cat_billedcopilotcredits`): PPAC usage report → `consumed`.
 - Environment ID (`cat_environmentid`): PPAC usage report → `Environment Id`.
-- Feature Name (`cat_featurename`): PPAC usage report → `Feature`.
-- Non-billed Copilot Credits (`cat_nonbilledcopilotcredits`): PPAC usage report → `Non-billed messages`.
+- Feature Name (`cat_featurename`): PPAC usage report → `FeatureName`.
+- Non-billed Copilot Credits (`cat_nonbilledcopilotcredits`): PPAC usage report → `NonBilledQuantity`.
 - Usage Date (`cat_usagedate`): PPAC usage report → `Usage Date`.
+- Channel Id (`cat_channelid`): PPAC usage report → `ChannelId`.
+- Knowledge Sources (`cat_knowldgesources`): PPAC usage report → `KnowledgeSources`.
+- Users (`cat_users`): PPAC usage report → `Users`.
+- Tool Invoked (`cat_toolinvoked`): PPAC usage report → `ToolInvoked`.
+- From Date (`cat_fromdate`): PPAC usage report → `FromDate`. Start date of the week for which agent usage was fetched.
+- To Date (`cat_todate`): PPAC usage report → `ToDate`. End date of the week for which agent usage was fetched.
+- LLM Model (`cat_llmmodel`): PPAC usage report → `LLMModel`.
 
 ---
