@@ -53,12 +53,6 @@ Before using PowerShield, ensure you have:
 
 PowerShield uses two **HTTP with Microsoft Entra ID (preauthorized)** connection references shared across both code apps for environment discovery and DLP policy management.
 
-Each code app also registers its own platform connectors:
-
-| Code App | Platform Connectors |
-|----------|-------------------|
-| **Copilot Studio Kit for Makers** | Microsoft Dataverse, Power Apps for Makers |
-| **Copilot Studio Kit for Admins** | Microsoft Dataverse, Power Platform for Admins |
 
 #### 1. PowerShield APIFlow
 
