@@ -117,33 +117,23 @@ Displayed as summary cards at the top of the analysis view.
 | **Start Time** | When the conversation began (local time) |
 | **Channel** | Communication channel used (e.g., webchat, msteams) — shown when available |
 
----
-
 ### Execution Path
 
 The Execution Path lists every step the agent's orchestrator executed, grouped by conversation turn. Each step card shows the step name, type, duration, and outcome.
-
----
 
 ### Performance Timeline
 
 The Performance Timeline shows execution time per step across all turns, making it easy to identify which steps caused latency. Steps are grouped by conversation turn and displayed with their duration. The slowest step in each turn is highlighted so bottlenecks are immediately visible.
 
----
-
 ### Conversation Preview
 
 The Conversation Preview panel shows the full conversation exchange as it appeared to the user, including bot and user messages, Adaptive Cards, suggested actions, feedback, and knowledge references. Clicking a user message loads that turn's steps into the Debug Information panel. The **View JSON** link in the header opens the full Transcript JSON dialog.
-
----
 
 ### Debug Information
 
 The Debug Information panel shows detailed information for a selected step: the LLM's reasoning thought, input arguments, observation returned, token usage, and knowledge sources searched and cited. Click any user message in the Conversation Preview to load its steps, then select a step to view its details here.
 
 For **multi-agent conversations**, the Agent Debugger automatically detects connected and child agents from the parent transcript and surfaces them as special step cards. Each connected agent card shows the agent name, execution time, the instruction passed to it, and the child conversation ID. The child transcript and its metadata are loaded automatically — every step the child agent executed is available directly from the card.
-
----
 
 ### Transcript JSON
 
@@ -168,7 +158,6 @@ Use this when:
 3. Check that the `cat_istranscriptavailablecode` column is set to `1` on that record. The sync sets this flag when at least one transcript exists.
 4. See [AGENT\_INVENTORY.md](https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/blob/main/AGENT_INVENTORY.md) for full sync instructions.
 
----
 
 ### Conversation ID not found in the dropdown
 
@@ -178,7 +167,6 @@ Use this when:
 1. Type the conversation ID directly into the Conversation ID field — this triggers a full search across all transcripts for that agent.
 2. If the conversation just ended, wait 35-40 minutes for the transcript to be written to Dataverse, then refresh.
 
----
 
 ### "Analyze" loads but shows no steps in the Debug Information panel
 
@@ -188,7 +176,6 @@ Use this when:
 1. Click the **View JSON** link in the Conversation Preview header to confirm activities are present.
 2. Look for `type: "trace"` or `type: "event"` entries. If absent, the channel may not emit trace data — this is expected for certain custom channels and older schema versions.
 
----
 
 ### "Access denied" or blank page on load
 
@@ -198,7 +185,6 @@ Use this when:
 1. In the **kit environment**, the user must have the **CSK - Administrator** or **System Administrator** role to access Agent Debugger.
 2. In the **target environment** where the agent resides, the Dataverse connection reference must have sufficient access to read the `conversationtranscripts`, `bot`, and `botcomponents` tables.
 
----
 
 ### Transcripts appear incomplete (missing early messages)
 
@@ -208,7 +194,6 @@ Use this when:
 1. Dataverse purges conversation transcripts older than 30 days by default. If retention is the issue, update the bulk delete job schedule in **Power Apps → Settings → Advanced settings → Data Management → Bulk Record Deletion**.
 2. If retention is not the cause, verify that all transcript records for the conversation exist in the `conversationtranscripts` table in Dataverse.
 
----
 
 ### Steps show raw schema names instead of readable topic names
 
