@@ -28,12 +28,12 @@ When a conversation takes place in Copilot Studio, the platform records a detail
 
 | Area | What you learn |
 |---|---|
-| Conversation Preview | Full chat exchange, rendered with markdown and adaptive cards |
+| General Information | Session count, turn count, outcome, duration, start time, channel, and AI model used |
 | Execution Path | Which topics, actions, knowledge searches, code steps, and connected agents ran — and in what order |
 | Performance Timeline | How long each step took per conversation turn; instantly spot slow steps |
+| Conversation Preview | Full chat exchange, rendered with markdown and adaptive cards |
 | Debug Information | Step-by-step execution for the selected user message: every topic, action, knowledge search, and tool invoked — with thought, arguments, observation, token counts, and knowledge sources |
 | Transcript JSON | Full raw transcript activities as syntax-highlighted, searchable JSON — opened via the **View JSON** link in the Conversation Preview header |
-| General Information | Session count, turn count, outcome, duration, start time, channel, and AI model used |
 
 **Key capabilities:**
 
@@ -49,18 +49,14 @@ When a conversation takes place in Copilot Studio, the platform records a detail
 
 ### 1. Agent Inventory
 
+The Agent Debugger lists agents from the Agent Inventory. Run an Agent Inventory sync before using this feature to ensure agents and their transcript availability are up to date.
+
 See the Agent Inventory documentation for setup instructions:
 **→ [AGENT\_INVENTORY.md](https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/blob/main/AGENT_INVENTORY.md)**
 
-### 2. Conversation Transcripts
+### 2. Security role and connection permissions
 
-Conversation transcripts are supported in **production** and **sandbox** Dataverse environments. See [View and export conversation transcripts](https://learn.microsoft.com/en-us/microsoft-copilot-studio/analytics-sessions-transcripts) for details.
-
-> **Note:** Transcripts may take a few minutes to appear after a conversation ends.
-
-### 3. Security role and connection permissions
-
-The user must have the **CSK - Administrator** security role within the kit for this feature to be accessible.
+The user must have the **CSK - Administrator** or **System Administrator** security role within the kit for this feature to be accessible.
 
 The **Dataverse connection reference** used by the app must have **Read** access to the following tables in the target environment:
 
