@@ -12,6 +12,8 @@ The **Agent Debugger** is a diagnostic tool that lets users load any recorded co
 4. [Analysis View](#analysis-view)
    - [General Information](#general-information)
    - [Conversation Preview](#conversation-preview)
+   - [Execution Path](#execution-path)
+   - [Performance Timeline](#performance-timeline)
    - [Debug Information](#debug-information)
    - [Transcript JSON](#transcript-json)
 5. [Connected and Child Agents](#connected-and-child-agents)
@@ -29,6 +31,8 @@ When a conversation takes place in Copilot Studio, the platform records a detail
 | Area | What you learn |
 |---|---|
 | Conversation Preview | Full chat exchange, rendered with markdown and adaptive cards |
+| Execution Path | Which topics, actions, knowledge searches, code steps, and connected agents ran — and in what order |
+| Performance Timeline | How long each step took per conversation turn; instantly spot slow steps |
 | Debug Information | Step-by-step execution for the selected user message: every topic, action, knowledge search, and tool invoked — with thought, arguments, observation, token counts, and knowledge sources |
 | Transcript JSON | Full raw transcript activities as syntax-highlighted, searchable JSON — opened via the **View JSON** link in the Conversation Preview header |
 | General Information | Session count, turn count, outcome, duration, start time, channel, and AI model used |
@@ -91,7 +95,7 @@ Populated from the distinct environment names found in Agent Inventory. Selectin
 
 ### Filter 2 — Agent
 
-Shows all agents in the selected environment that have at least one conversation transcript (`cat_istranscriptavailablecode = 1`). Selecting an agent loads the most recent 50 conversations for the Conversation ID dropdown.
+Shows all agents in the selected environment that have at least one conversation transcript. Selecting an agent loads the most recent 50 conversations for the Conversation ID dropdown.
 
 ### Filter 3 — Conversation ID
 
@@ -104,24 +108,7 @@ Once a Conversation ID is selected, the **Analyze** button becomes active. Click
 
 ## Analysis View
 
-The analysis view is a two-column layout: the **Conversation Preview** (left, sticky) and the **Debug Information panel** (right). Above both columns is a General Information summary. The Conversation Preview header includes a **View JSON** link to open the full raw Transcript JSON.
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│  General Information                                          │
-│  Sessions: 1   Turns: 7   Outcome: Escalated   Duration: 3m  │
-├─────────────────────────┬────────────────────────────────────┤
-│  Conversation Preview   │  Debug Information (right)         │
-│  (left, sticky)         │                                    │
-│                         │  Turn 1 — "Book a flight"          │
-│  User: Book a flight    │   ├─ Booking Topic  0.4s           │
-│  Bot:  Where would...   │   ├─ Lookup Flights 2.1s           │
-│  ...                    │   └─ Adaptive Card  0.1s           │
-│                         │                                    │
-│  [View JSON]            │  Turn 2 — "London"                 │
-│                         │   └─ ...                           │
-└─────────────────────────┴────────────────────────────────────┘
-```
+The analysis view is a two-column layout: the **Conversation Preview** (left, sticky) and the **Debug Information panel** (right). Above both columns is a **General Information** summary row. The Debug Information panel contains the **Execution Path** and **Performance Timeline** views. The Conversation Preview header includes a **View JSON** link to open the full raw Transcript JSON.
 
 ### General Information
 
@@ -175,6 +162,25 @@ The Debug Information panel (right side) shows every step the agent's orchestrat
 | Custom Prompt | Blue | Prompt steps with prediction output |
 | Deep Reasoning | Blue | P:ReasonerTool |
 | Failed | Red | Any step with error outcome |
+
+---
+
+### Execution Path
+
+The Execution Path lists every step the agent's orchestrator executed, grouped by conversation turn. Each step card shows:
+
+- **Icon + Name** — the topic, action, knowledge source, tool, or connected agent that was invoked
+- **Type badge** — Topic, Knowledge, Code, Connector Action, Tool, Flow, Custom Prompt, Deep Reasoning, or Connected Agent
+- **Duration** — how long the step took
+- **Outcome badge** — success or failed
+
+Clicking a step expands it to reveal the full **Debug Information** for that step — thought, arguments, observation, token usage, and knowledge sources.
+
+---
+
+### Performance Timeline
+
+The Performance Timeline shows execution time per step across all turns, making it easy to identify which steps caused latency. Steps are grouped by conversation turn and displayed with their duration. The slowest step in each turn is highlighted so bottlenecks are immediately visible.
 
 ---
 
