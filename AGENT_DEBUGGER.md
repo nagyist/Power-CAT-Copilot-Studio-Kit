@@ -1,24 +1,109 @@
 # Agent Debugger
 
-The **Agent Debugger** is a diagnostic tool inside the **Copilot Studio Kit Admin** app that lets administrators load any recorded conversation and inspect every decision the agent made — step by step, with timing, token usage, knowledge sources, arguments, and observations — without leaving the Power Platform.
+The **Agent Debugger** is a diagnostic tool that lets users load any recorded conversation and inspect every decision the agent made — step by step, with timing, token usage, knowledge sources, arguments, and observations — without leaving the Power Platform.
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#overview)
-2. [Prerequisites](#prerequisites)
-3. [Required Permissions](#required-permissions)
-4. [Getting Started — Filters](#getting-started--filters)
-5. [Analysis View](#analysis-view)
+1. [Why This Feature Exists](#why-this-feature-exists)
+2. [Overview](#overview)
+3. [Prerequisites](#prerequisites)
+4. [Required Permissions](#required-permissions)
+5. [Getting Started — Filters](#getting-started--filters)
+6. [Analysis View](#analysis-view)
    - [General Information](#general-information)
-   - [Execution Path](#execution-path)
-   - [Performance Timeline](#performance-timeline)
    - [Conversation Preview](#conversation-preview)
-   - [Debug Info](#debug-info)
-6. [Connected and Child Agents](#connected-and-child-agents)
-7. [How Data Is Fetched and Processed](#how-data-is-fetched-and-processed)
-8. [Troubleshooting](#troubleshooting)
+   - [Debug Information](#debug-information)
+   - [Transcript JSON](#transcript-json)
+7. [Connected and Child Agents](#connected-and-child-agents)
+8. [How Data Is Fetched and Processed](#how-data-is-fetched-and-processed)
+9. [Troubleshooting](#troubleshooting)
+
+---
+
+## Why This Feature Exists
+
+### The debugging gap in modern Copilot Studio
+
+Copilot Studio has evolved from a rule-based topic editor into an **AI-orchestrated agent platform**. Agents no longer follow a fixed decision tree — the large language model decides at runtime which topics to trigger, which actions to invoke, which knowledge sources to query, and whether to delegate work to a connected sub-agent. This shift brings tremendous flexibility, but it also introduces a class of problems that traditional chatbot debugging tools were never designed to handle.
+
+**The built-in Test Canvas in Copilot Studio** lets you run a live conversation and see which topic was triggered. That is useful during authoring, but it falls short in several critical ways once agents are in production:
+
+| Limitation | Impact |
+|---|---|
+| Live only — no access to past conversations | Cannot investigate what happened in a specific user conversation that has already ended |
+| Topic-level visibility only | Does not show individual action arguments, observations, LLM thoughts, or step-level timing |
+| No token visibility | Cannot see how many tokens a step consumed, or which step is driving up model costs |
+| No knowledge-source traceability | Cannot see what the knowledge base returned vs what the model actually cited in its answer |
+| No multi-agent drill-down | When a connected agent is invoked, there is no way to follow into its transcript from the parent |
+| No performance breakdown | Cannot identify which step is causing slow responses without manually parsing JSON |
+
+Meanwhile, Copilot Studio writes an extremely detailed trace log — over **30 distinct event types** covering every plan step, LLM reasoning thought, knowledge search, token count, MCP tool call, and connected-agent session — into the `conversationtranscripts` Dataverse table. This data exists, but it arrives as raw, chunked JSON across potentially many records and is practically impossible to interpret manually.
+
+### What organisations actually need
+
+When agents are used in business-critical processes — HR intake, customer service, IT helpdesk, sales qualification — a failed or unexpected conversation is not just a product curiosity. It is an incident that requires root-cause analysis. Administrators need to answer questions like:
+
+- **"Why did the agent give the wrong answer?"** — Was the right knowledge source even searched? Was it returned but not cited? Did a connected agent fail silently?
+- **"Why is the agent slow?"** — Which step is taking 15 seconds? Is it the knowledge retrieval, a slow Power Automate flow, or a model reasoning step?
+- **"Did the agent do what I configured it to do?"** — Did it invoke the correct action with the correct parameters? What did the action return? Did it honour the topic's decision branches?
+- **"What did the AI actually think?"** — Before invoking a tool, the orchestrator records its reasoning. Surfacing this reasoning is essential for safety reviews, alignment checks, and understanding non-deterministic behaviour.
+- **"Why did the conversation end in a SystemError?"** — Which step failed, and with what error payload?
+- **"What happened in the sub-agent?"** — The parent agent delegated to a connected Interview Agent. The user got an unexpected response. What did the Interview Agent actually do?
+
+### Why this is especially important for multi-agent systems
+
+Multi-agent architecture — where a parent orchestrator invokes specialised connected agents — is now a first-class pattern in Copilot Studio. Each connected agent runs its own conversation in its own transcript record, linked to the parent by a derived conversation ID (`parentConversationId_sessionId`). Without tooling, debugging a multi-agent conversation means:
+
+1. Manually finding the parent transcript record in Dataverse
+2. Parsing the raw JSON to find the `ConnectedAgentInitializeTraceData` event
+3. Constructing the child conversation ID by hand
+4. Querying for the child transcript separately
+5. Repeating for each connected agent
+6. Correlating step timings, observations, and errors across all of them
+
+The Agent Debugger automates this entirely. It detects connected agents from the parent transcript, constructs child conversation IDs, fetches and parses child transcripts on demand, and presents the full multi-agent conversation as a unified, navigable view.
+
+### The result
+
+The Agent Debugger closes the gap between what Copilot Studio records and what administrators can actually see. It turns a raw, fragmented, multi-record JSON payload into an actionable diagnostic interface — enabling faster incident resolution, informed prompt and knowledge-base tuning, cost visibility through token tracking, and confidence that AI-orchestrated agents are behaving as intended in production.
+
+### Who uses Agent Debugger and how
+
+#### End users — reporting an issue
+
+When a user has a bad conversation — wrong answer, missing information, unexpected error — they can share the **Conversation ID** from their session with a support team or IT helpdesk. This single ID is enough for an administrator to pull up the exact conversation in Agent Debugger and see precisely what the agent did during that exchange. No reproduction is needed. No guesswork. The transcript is already in Dataverse.
+
+> **Workflow:** User reports issue → shares Conversation ID → administrator opens Agent Debugger → selects agent and pastes ID → clicks Analyze → full conversation and execution path are immediately available.
+
+#### Support teams and CSK Administrators — incident investigation
+
+Administrators use Agent Debugger as a **post-mortem tool** for specific reported conversations. Common investigation scenarios:
+
+- **Wrong answer:** Check which knowledge sources were searched and what was returned. Verify whether the correct source was cited — or whether the model ignored a relevant result.
+- **Unexpected topic trigger:** See the intent recognition result and which topic the orchestrator chose, and why.
+- **Silent failure:** Find the red (failed) step in the Debug Information panel, inspect its observation for the error payload, and identify whether a flow, connector, or connected agent was the root cause.
+- **Conversation ended abruptly:** Check the session outcome (`SystemError`, `Abandoned`) in General Info, then trace back to the step that caused it.
+
+The **View JSON** link in the Conversation Preview header opens the raw Transcript JSON that can be copied and attached to support tickets or shared with Microsoft for escalation.
+
+#### Makers — optimising agent quality and performance
+
+Makers use Agent Debugger to iteratively improve their agents based on real conversation data rather than test-canvas assumptions:
+
+- **Bottleneck identification:** The Debug Information panel shows execution time per step. A step taking 15+ seconds immediately stands out. Makers can pinpoint whether it is a slow Power Automate flow, a large knowledge search, a connected agent round-trip, or a multi-step reasoning chain.
+- **Knowledge source quality:** For each bot response, the Debug Information panel shows which knowledge sources were searched, which were returned, and which were actually cited. If the agent is consistently ignoring a relevant document, it is a signal to adjust chunking strategy, metadata, or prompt configuration.
+- **Step arguments and observations:** Makers can verify that actions are receiving the correct inputs (e.g., correct variable values being passed to a flow) and returning the expected outputs — without writing test scripts.
+- **LLM reasoning review:** The "Thought" field on each step shows the orchestrator's reasoning before it selected that step. Makers can see whether the model is interpreting user intent correctly or making incorrect assumptions.
+- **Connected agent quality:** When a connected specialist agent is invoked, its child transcript can be loaded directly from the card. Makers can see every step the child agent took and verify it completed its task correctly.
+- **Token cost awareness:** Per-step token counts help makers identify which steps are expensive. A knowledge retrieval step returning massive chunks, or a custom prompt with a very long system message, will show clearly in the token breakdown.
+
+#### IT administrators and CoE teams — governance and oversight
+
+- **Audit and compliance:** Any conversation can be reviewed to confirm the agent behaved appropriately, did not disclose sensitive information, and followed configured guardrails.
+- **Outcome analysis:** Session outcomes (`Resolved`, `Escalated`, `Abandoned`, `SystemError`) are visible immediately without querying Dataverse directly. Teams can use this to prioritise which conversations need follow-up.
+- **Multi-environment support:** Because Agent Debugger reads from the Agent Inventory — which can cover agents across multiple environments — administrators can debug agents in development, test, and production environments from a single interface.
 
 ---
 
@@ -30,11 +115,10 @@ When a conversation takes place in Copilot Studio, the platform records a detail
 
 | Area | What you learn |
 |---|---|
-| Execution Path | Which topics, actions, knowledge searches, code steps, and connected agents ran — and in what order |
-| Performance Timeline | How long each step took per conversation turn; instantly spot slow steps |
 | Conversation Preview | Full chat exchange, rendered with markdown and adaptive cards |
-| Debug Info | Raw transcript activities as searchable JSON |
-| General Info | Duration, turn count, session outcome, and GPT model used |
+| Debug Information | Step-by-step execution for the selected user message: every topic, action, knowledge search, and tool invoked — with thought, arguments, observation, token counts, and knowledge sources |
+| Transcript JSON | Full raw transcript activities as syntax-highlighted, searchable JSON — opened via the **View JSON** link in the Conversation Preview header |
+| General Information | Session count, turn count, outcome, duration, start time, channel, and AI model used |
 
 **Key capabilities:**
 
@@ -137,26 +221,23 @@ Once a Conversation ID is selected, the **Analyze** button becomes active. Click
 
 ## Analysis View
 
-The analysis view is a two-column layout: the **Execution Path** (left) and the **Conversation Preview** (right, sticky). Above both columns is a General Information summary, and a set of tabs gives access to additional views.
+The analysis view is a two-column layout: the **Conversation Preview** (left, sticky) and the **Debug Information panel** (right). Above both columns is a General Information summary. The Conversation Preview header includes a **View JSON** link to open the full raw Transcript JSON.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │  General Information                                          │
-│  Duration: 3m 52s   Turns: 7   Outcome: Escalated            │
-├────────────────────────────────┬─────────────────────────────┤
-│  Execution Path (left)         │  Conversation Preview       │
-│                                │  (right, sticky)            │
-│  Turn 1 — "Book a flight"      │  User: Book a flight        │
-│   ├─ Booking Topic  0.4s       │  Bot:  Where would you...   │
-│   ├─ Lookup Flights 2.1s       │  ...                        │
-│   └─ Adaptive Card  0.1s       │                             │
-│                                │                             │
-│  Turn 2 — "London"             │                             │
-│   └─ ...                       │                             │
-│                                │                             │
-├────────────────────────────────┴─────────────────────────────┤
-│  Tabs:  Performance Timeline | Debug Info                     │
-└──────────────────────────────────────────────────────────────┘
+│  Sessions: 1   Turns: 7   Outcome: Escalated   Duration: 3m  │
+├─────────────────────────┬────────────────────────────────────┤
+│  Conversation Preview   │  Debug Information (right)         │
+│  (left, sticky)         │                                    │
+│                         │  Turn 1 — "Book a flight"          │
+│  User: Book a flight    │   ├─ Booking Topic  0.4s           │
+│  Bot:  Where would...   │   ├─ Lookup Flights 2.1s           │
+│  ...                    │   └─ Adaptive Card  0.1s           │
+│                         │                                    │
+│  [View JSON]            │  Turn 2 — "London"                 │
+│                         │   └─ ...                           │
+└─────────────────────────┴────────────────────────────────────┘
 ```
 
 ### General Information
@@ -165,18 +246,21 @@ Displayed as summary cards at the top of the analysis view.
 
 | Field | Description |
 |---|---|
-| **Duration** | Total conversation duration from first to last activity |
+| **Sessions** | Number of conversation sessions (multiple sessions occur when a user returns to the same conversation after inactivity) |
 | **Turns** | Number of user messages in the conversation |
 | **Outcome** | Session outcome reported by the platform (e.g., Resolved, Escalated, Abandoned, SystemError) |
-| **Transcript ID** | Dataverse conversation transcript record identifier |
+| **Duration** | Total conversation duration from first to last activity |
+| **Start Time** | When the conversation began (local time) |
+| **Channel** | Communication channel used (e.g., webchat, msteams) — shown when available |
+| **Model** | AI model name used by the agent — shown when available |
 
-The outcome badge uses the platform's `SessionInfo` trace at the end of the transcript. A `SystemError` outcome usually means a flow, connector, or orchestration error occurred — check the Execution Path for red (failed) steps.
+The outcome badge uses the platform's `SessionInfo` trace at the end of the transcript. A `SystemError` outcome usually means a flow, connector, or orchestration error occurred — check the Debug Information panel for red (failed) steps.
 
 ---
 
-### Execution Path
+### Debug Information
 
-The Execution Path panel shows every step the agent's orchestrator executed, grouped by the user's turn that triggered it.
+The Debug Information panel (right side) shows every step the agent's orchestrator executed for the selected user message, grouped by conversation turn. Click any user message in the Conversation Preview to load its steps here.
 
 **Each step card shows:**
 - **Icon + Name** — derived from the step's schema name or component metadata (e.g., `Booking Topic`, `Search Knowledge`, `ResumeUpload`)
@@ -191,7 +275,7 @@ The Execution Path panel shows every step the agent's orchestrator executed, gro
 - **Token usage** — prompt + completion token counts and model name (when available)
 - **Knowledge sources** — what was searched, what was returned, what was cited
 
-**Clicking a user message in the Conversation Preview** highlights the corresponding turn in the Execution Path, making it easy to correlate what the user said with what the agent did.
+**Clicking a user message in the Conversation Preview** loads that turn's steps into the Debug Information panel, making it easy to correlate what the user said with what the agent did.
 
 **Step type icons and colours:**
 
@@ -211,30 +295,6 @@ The Execution Path panel shows every step the agent's orchestrator executed, gro
 
 ---
 
-### Performance Timeline
-
-The Performance Timeline tab shows a **waterfall chart** of step execution times, grouped by conversation turn. Use this to quickly identify which steps caused latency.
-
-**Layout:**
-
-```
-Turn 1 — "Process these resumes"                          1m 5s total
-├─ 4 steps  ·  Slowest: SummarizeResume  17.33s
-└─ Timeline  0s ─────────── 30s ────────────── 1m 5s
-   ResumeUpload        ████                       2.4s
-   SummarizeResume      ████████████████         17.3s  ⚠ slowest
-   NotifyTeams                      ███           3.1s
-   SendMessageTool                     █          0.1s
-```
-
-**Features:**
-- Bars are colour-coded by step type (same as Execution Path)
-- A warning icon marks the slowest step in each turn
-- Each turn section is collapsible
-- Connected agent steps appear as their own bar, coloured purple
-
----
-
 ### Conversation Preview
 
 The Conversation Preview panel shows the full conversation exchange as it appeared to the user.
@@ -248,23 +308,24 @@ The Conversation Preview panel shows the full conversation exchange as it appear
 - **Knowledge references** — expandable list of sources the bot cited
 
 **Interaction:**
-- **Clicking a user message** selects it and highlights the corresponding turn in the Execution Path panel, so you can immediately see what steps were triggered by that message.
+- **Clicking a user message** selects it and loads that turn's execution steps into the Debug Information panel on the right, so you can immediately see what the agent did in response to that message.
+- The **View JSON** link in the Conversation Preview card header opens the full Transcript JSON dialog.
 
 > **Note:** Bot messages in Copilot Studio use markdown formatting. All markdown in the Conversation Preview is rendered — tables, headings, bullet lists, and inline styles are displayed as formatted content, not raw syntax.
 
 ---
 
-### Debug Info
+### Transcript JSON
 
-The Debug Info tab shows the **raw transcript activities** as a syntax-highlighted, searchable JSON view.
+The **View JSON** link in the top-right corner of the Conversation Preview header opens a **Transcript JSON** dialog showing the full raw transcript activities.
 
 Use this when:
-- You need to inspect an event type not surfaced in the UI
+- You need to inspect an event type not surfaced in the Debug Information panel
 - You want to copy specific fields for a support ticket
 - You are investigating unexpected behaviour in the parsed views
 
 **Features:**
-- Full syntax highlighting (Prism.js)
+- Full syntax highlighting
 - Search with keyword highlighting and next/prev navigation
 - Copy-to-clipboard button for the full JSON
 
@@ -277,9 +338,9 @@ Copilot Studio supports **multi-agent architectures** where a parent agent deleg
 - **Connected agents** — separately published agents invoked via `InvokeConnectedAgentTaskAction`
 - **Child agents** — agents called through the orchestration layer (`type = "Agent"` steps)
 
-The Agent Debugger detects both kinds automatically from the parent transcript and surfaces them as special step cards in the Execution Path.
+The Agent Debugger detects both kinds automatically from the parent transcript and surfaces them as special step cards in the Debug Information panel.
 
-**Execution Path — Connected Agent card shows:**
+**Connected Agent card shows:**
 - Agent name
 - Total execution time
 - The instruction/task passed to the child agent
@@ -390,12 +451,12 @@ The merged transcript is then parsed event-by-event. The parser maintains a roll
 
 ---
 
-### "Analyze" loads but shows no steps in the Execution Path
+### "Analyze" loads but shows no steps in the Debug Information panel
 
 **Cause:** The transcript exists but contains only message-type activities with no diagnostic trace events. This typically happens when the conversation came from a channel that does not emit trace data (e.g., certain custom channels or very old schema versions).
 
 **Resolution:**
-1. Check the **Debug Info** tab to confirm activities are present.
+1. Click the **View JSON** link in the Conversation Preview header to confirm activities are present.
 2. Look for `type: "trace"` or `type: "event"` entries. If absent, trace logging may be disabled for this channel.
 3. In Copilot Studio, verify that **Transcript logging** is enabled in the agent's **Settings → Advanced**.
 
@@ -412,12 +473,12 @@ The merged transcript is then parsed event-by-event. The parser maintains a roll
 
 ---
 
-### Performance Timeline shows 0s for all steps
+### Steps show 0s duration in the Debug Information panel
 
 **Cause:** Execution time is read from `DynamicPlanStepFinished.executionTime`. If the step finished events are missing or malformed, durations fall back to timestamp-based estimates.
 
 **Resolution:**
-1. Open **Debug Info** and search for `DynamicPlanStepFinished`. Confirm the events are present and contain an `executionTime` field.
+1. Click the **View JSON** link in the Conversation Preview header and search for `DynamicPlanStepFinished`. Confirm the events are present and contain an `executionTime` field.
 2. If events are missing, the conversation may have ended abruptly (e.g., `SystemError` outcome). Steps that never finished will show 0s.
 
 ---
@@ -437,7 +498,7 @@ The merged transcript is then parsed event-by-event. The parser maintains a roll
 **Cause:** Long conversations can span many 1 MB Dataverse records. If some records are missing or were purged, the merged transcript will have gaps.
 
 **Resolution:**
-1. Open **Debug Info** and check the `mergedSessionKey` field on activities — gaps between batch IDs indicate missing chunks.
+1. Click the **View JSON** link in the Conversation Preview header and check the `mergedSessionKey` field on activities — gaps between batch IDs indicate missing chunks.
 2. Dataverse transcript retention policies may have purged older records. Check the transcript retention setting in your environment's Copilot Studio configuration.
 3. If retention is the issue, consider reducing conversation length or increasing the retention window.
 
