@@ -1,109 +1,22 @@
 # Agent Debugger
 
-The **Agent Debugger** is a diagnostic tool that lets users load any recorded conversation and inspect every decision the agent made — step by step, with timing, token usage, knowledge sources, arguments, and observations — without leaving the Power Platform.
+The **Agent Debugger** is a diagnostic tool that lets users load any recorded conversation and inspect every decision the agent made — step by step, with timing, token usage, knowledge sources, arguments, and observations.
 
 ---
 
 ## Table of Contents
 
-1. [Why This Feature Exists](#why-this-feature-exists)
-2. [Overview](#overview)
-3. [Prerequisites](#prerequisites)
-4. [Required Permissions](#required-permissions)
-5. [Getting Started — Filters](#getting-started--filters)
-6. [Analysis View](#analysis-view)
+1. [Overview](#overview)
+2. [Prerequisites](#prerequisites)
+3. [Getting Started — Filters](#getting-started--filters)
+4. [Analysis View](#analysis-view)
    - [General Information](#general-information)
    - [Conversation Preview](#conversation-preview)
    - [Debug Information](#debug-information)
    - [Transcript JSON](#transcript-json)
-7. [Connected and Child Agents](#connected-and-child-agents)
-8. [How Data Is Fetched and Processed](#how-data-is-fetched-and-processed)
-9. [Troubleshooting](#troubleshooting)
-
----
-
-## Why This Feature Exists
-
-### The debugging gap in modern Copilot Studio
-
-Copilot Studio has evolved from a rule-based topic editor into an **AI-orchestrated agent platform**. Agents no longer follow a fixed decision tree — the large language model decides at runtime which topics to trigger, which actions to invoke, which knowledge sources to query, and whether to delegate work to a connected sub-agent. This shift brings tremendous flexibility, but it also introduces a class of problems that traditional chatbot debugging tools were never designed to handle.
-
-**The built-in Test Canvas in Copilot Studio** lets you run a live conversation and see which topic was triggered. That is useful during authoring, but it falls short in several critical ways once agents are in production:
-
-| Limitation | Impact |
-|---|---|
-| Live only — no access to past conversations | Cannot investigate what happened in a specific user conversation that has already ended |
-| Topic-level visibility only | Does not show individual action arguments, observations, LLM thoughts, or step-level timing |
-| No token visibility | Cannot see how many tokens a step consumed, or which step is driving up model costs |
-| No knowledge-source traceability | Cannot see what the knowledge base returned vs what the model actually cited in its answer |
-| No multi-agent drill-down | When a connected agent is invoked, there is no way to follow into its transcript from the parent |
-| No performance breakdown | Cannot identify which step is causing slow responses without manually parsing JSON |
-
-Meanwhile, Copilot Studio writes an extremely detailed trace log — over **30 distinct event types** covering every plan step, LLM reasoning thought, knowledge search, token count, MCP tool call, and connected-agent session — into the `conversationtranscripts` Dataverse table. This data exists, but it arrives as raw, chunked JSON across potentially many records and is practically impossible to interpret manually.
-
-### What organisations actually need
-
-When agents are used in business-critical processes — HR intake, customer service, IT helpdesk, sales qualification — a failed or unexpected conversation is not just a product curiosity. It is an incident that requires root-cause analysis. Administrators need to answer questions like:
-
-- **"Why did the agent give the wrong answer?"** — Was the right knowledge source even searched? Was it returned but not cited? Did a connected agent fail silently?
-- **"Why is the agent slow?"** — Which step is taking 15 seconds? Is it the knowledge retrieval, a slow Power Automate flow, or a model reasoning step?
-- **"Did the agent do what I configured it to do?"** — Did it invoke the correct action with the correct parameters? What did the action return? Did it honour the topic's decision branches?
-- **"What did the AI actually think?"** — Before invoking a tool, the orchestrator records its reasoning. Surfacing this reasoning is essential for safety reviews, alignment checks, and understanding non-deterministic behaviour.
-- **"Why did the conversation end in a SystemError?"** — Which step failed, and with what error payload?
-- **"What happened in the sub-agent?"** — The parent agent delegated to a connected Interview Agent. The user got an unexpected response. What did the Interview Agent actually do?
-
-### Why this is especially important for multi-agent systems
-
-Multi-agent architecture — where a parent orchestrator invokes specialised connected agents — is now a first-class pattern in Copilot Studio. Each connected agent runs its own conversation in its own transcript record, linked to the parent by a derived conversation ID (`parentConversationId_sessionId`). Without tooling, debugging a multi-agent conversation means:
-
-1. Manually finding the parent transcript record in Dataverse
-2. Parsing the raw JSON to find the `ConnectedAgentInitializeTraceData` event
-3. Constructing the child conversation ID by hand
-4. Querying for the child transcript separately
-5. Repeating for each connected agent
-6. Correlating step timings, observations, and errors across all of them
-
-The Agent Debugger automates this entirely. It detects connected agents from the parent transcript, constructs child conversation IDs, fetches and parses child transcripts on demand, and presents the full multi-agent conversation as a unified, navigable view.
-
-### The result
-
-The Agent Debugger closes the gap between what Copilot Studio records and what administrators can actually see. It turns a raw, fragmented, multi-record JSON payload into an actionable diagnostic interface — enabling faster incident resolution, informed prompt and knowledge-base tuning, cost visibility through token tracking, and confidence that AI-orchestrated agents are behaving as intended in production.
-
-### Who uses Agent Debugger and how
-
-#### End users — reporting an issue
-
-When a user has a bad conversation — wrong answer, missing information, unexpected error — they can share the **Conversation ID** from their session with a support team or IT helpdesk. This single ID is enough for an administrator to pull up the exact conversation in Agent Debugger and see precisely what the agent did during that exchange. No reproduction is needed. No guesswork. The transcript is already in Dataverse.
-
-> **Workflow:** User reports issue → shares Conversation ID → administrator opens Agent Debugger → selects agent and pastes ID → clicks Analyze → full conversation and execution path are immediately available.
-
-#### Support teams and CSK Administrators — incident investigation
-
-Administrators use Agent Debugger as a **post-mortem tool** for specific reported conversations. Common investigation scenarios:
-
-- **Wrong answer:** Check which knowledge sources were searched and what was returned. Verify whether the correct source was cited — or whether the model ignored a relevant result.
-- **Unexpected topic trigger:** See the intent recognition result and which topic the orchestrator chose, and why.
-- **Silent failure:** Find the red (failed) step in the Debug Information panel, inspect its observation for the error payload, and identify whether a flow, connector, or connected agent was the root cause.
-- **Conversation ended abruptly:** Check the session outcome (`SystemError`, `Abandoned`) in General Info, then trace back to the step that caused it.
-
-The **View JSON** link in the Conversation Preview header opens the raw Transcript JSON that can be copied and attached to support tickets or shared with Microsoft for escalation.
-
-#### Makers — optimising agent quality and performance
-
-Makers use Agent Debugger to iteratively improve their agents based on real conversation data rather than test-canvas assumptions:
-
-- **Bottleneck identification:** The Debug Information panel shows execution time per step. A step taking 15+ seconds immediately stands out. Makers can pinpoint whether it is a slow Power Automate flow, a large knowledge search, a connected agent round-trip, or a multi-step reasoning chain.
-- **Knowledge source quality:** For each bot response, the Debug Information panel shows which knowledge sources were searched, which were returned, and which were actually cited. If the agent is consistently ignoring a relevant document, it is a signal to adjust chunking strategy, metadata, or prompt configuration.
-- **Step arguments and observations:** Makers can verify that actions are receiving the correct inputs (e.g., correct variable values being passed to a flow) and returning the expected outputs — without writing test scripts.
-- **LLM reasoning review:** The "Thought" field on each step shows the orchestrator's reasoning before it selected that step. Makers can see whether the model is interpreting user intent correctly or making incorrect assumptions.
-- **Connected agent quality:** When a connected specialist agent is invoked, its child transcript can be loaded directly from the card. Makers can see every step the child agent took and verify it completed its task correctly.
-- **Token cost awareness:** Per-step token counts help makers identify which steps are expensive. A knowledge retrieval step returning massive chunks, or a custom prompt with a very long system message, will show clearly in the token breakdown.
-
-#### IT administrators and CoE teams — governance and oversight
-
-- **Audit and compliance:** Any conversation can be reviewed to confirm the agent behaved appropriately, did not disclose sensitive information, and followed configured guardrails.
-- **Outcome analysis:** Session outcomes (`Resolved`, `Escalated`, `Abandoned`, `SystemError`) are visible immediately without querying Dataverse directly. Teams can use this to prioritise which conversations need follow-up.
-- **Multi-environment support:** Because Agent Debugger reads from the Agent Inventory — which can cover agents across multiple environments — administrators can debug agents in development, test, and production environments from a single interface.
+5. [Connected and Child Agents](#connected-and-child-agents)
+6. [How Data Is Fetched and Processed](#how-data-is-fetched-and-processed)
+7. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -132,60 +45,30 @@ When a conversation takes place in Copilot Studio, the platform records a detail
 
 ## Prerequisites
 
-### 1. Agent Inventory must be synchronised
-
-The Agent Debugger lists agents from the **Agent Inventory** in Dataverse. If an agent does not appear in the dropdown, its inventory record is missing or its transcript flag is not set.
+### 1. Agent Inventory
 
 See the Agent Inventory documentation for setup instructions:
 **→ [AGENT\_INVENTORY.md](https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/blob/main/AGENT_INVENTORY.md)**
 
-Specifically:
-- The agent must have been synced to the `cat_agentdetails` Dataverse table.
-- The `cat_istranscriptavailablecode` field on the agent record must be set to `1` (transcript available). This is set automatically during inventory sync when the agent has transcripts.
+### 2. Conversation Transcripts
 
-### 2. Conversation Transcripts must exist
-
-Transcripts are written to the `conversationtranscripts` Dataverse table by the Power Virtual Agents runtime automatically. No additional configuration is required — as long as conversation logging is enabled in the Copilot Studio agent settings, transcripts will be available.
+Conversation transcripts are supported in **production** and **sandbox** Dataverse environments. See [View and export conversation transcripts](https://learn.microsoft.com/en-us/microsoft-copilot-studio/analytics-sessions-transcripts) for details.
 
 > **Note:** Transcripts may take a few minutes to appear after a conversation ends.
 
-### 3. Security role
+### 3. Security role and connection permissions
 
-The user must have one of the following security roles in the target Dataverse environment:
+The user must have the **CSK - Administrator** security role within the kit for this feature to be accessible.
 
-| Role | Access |
+The **Dataverse connection reference** used by the app must have **Read** access to the following tables in the target environment:
+
+| Table | Logical Name |
 |---|---|
-| **CSK - Administrator** | Full access to Agent Debugger and all Copilot Studio Kit admin features |
-| **System Administrator** | Full environment access (includes all Copilot Studio Kit tables) |
+| **Conversation Transcripts** | `conversationtranscripts` |
+| **Bots** | `bot` |
+| **Bot Components** | `botcomponents` |
 
-Users with only the **CSK - Maker** role cannot access Agent Debugger — they will not see it in the navigation.
-
-For background on Copilot Studio Kit security roles, see the Agent Insights Hub documentation:
-**→ [AGENT\_INSIGHTS\_HUB.md](https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/blob/main/AGENT_INSIGHTS_HUB.md)**
-
----
-
-## Required Permissions
-
-Agent Debugger reads data from three Dataverse tables. The **Dataverse connection** configured in the app must have **read access** to all of them. This applies even when debugging agents that belong to a different environment — the connection must be authenticated with an identity that has the appropriate permissions in that environment.
-
-| Table | Logical Name | What it is used for |
-|---|---|---|
-| **Agent Details** | `cat_agentdetails` | List of agents and their environment metadata |
-| **Conversation Transcripts** | `conversationtranscripts` | Raw conversation activity logs |
-| **Bot Components** | `botcomponents` | Schema-name-to-display-name lookup for topics, actions, and tools |
-
-### Minimum required privileges
-
-The identity used by the Dataverse connector needs at least:
-
-- **Read** on `cat_agentdetails`
-- **Read** on `conversationtranscripts`
-- **Read** on `botcomponents`
-
-The **CSK - Administrator** security role grants all of these. Alternatively, a custom role with the above read privileges on those three tables is sufficient.
-
-> **Cross-environment access:** If the agent being debugged lives in a *different* environment from the one the app is installed in, the Dataverse connection must be authenticated in that remote environment and have the same read permissions there.
+> **Cross-environment access:** If the agent being debugged is in a different environment from where the kit is installed, the Dataverse connection must be authenticated in that remote environment with the same read permissions.
 
 ---
 
