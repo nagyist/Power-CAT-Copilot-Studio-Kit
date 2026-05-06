@@ -65,6 +65,7 @@ Remember: You can always raise an issue to the Copilot Studio Kit team in the Gi
 | Apr 1 (US) / N/A | Cancelled | US | – |
 | Apr 9 (APAC) | Confirmed | APAC | APAC session |
 | Apr 15 (US) / N/A | Confirmed | US | – |
+| May 7 (APAC) | Confirmed | APAC | – |
 
 ### Time Zone Converter
 For other time zones, use this converter with the base times:
