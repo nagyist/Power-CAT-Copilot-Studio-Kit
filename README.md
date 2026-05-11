@@ -30,6 +30,11 @@ More information on [Agent Insights Hub](https://github.com/microsoft/Power-CAT-
 
 More information on [Agent Debugger](https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/blob/main/AGENT_DEBUGGER.md)
 
+## Agent Library (Preview)
+The Agent Library is a centralized hub within the Copilot Studio Kit that helps makers discover, install, and manage pre-built agent templates and reusable components. Instead of building agents from scratch, you can browse a curated catalog of ready-to-use templates (Custom Agent and Declarative Agent) and components, install them directly into your environment, and customize them to fit your business needs.
+
+More information on [Agent Library](https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/blob/main/AGENT_LIBRARY.md)
+
 ## Component Library (Preview)
 The Component Library is a collection of ready-to-use, pre-built components for Microsoft Copilot Studio — packaged as component collections so you can import only the ones you need. The new app lets you easily browse and add the component to your environment. Add the component to your agent like you would with any component collection. Use agent instructions to control when and how each component is invoked — no custom development required.
 
