@@ -1,13 +1,13 @@
 # Copilot Studio Kit Office Hours
 ## Join the Copilot Studio Kit Office hours
 
-> [!IMPORTANT]
-> Beginning December 3, Copilot Studio Kit Office Hours will run every week, alternating between two time windows to support both US and APAC audiences:
+> [!NOTE]
+> Starting May 13, 2026, Copilot Studio Kit Office Hours will move to an every-other-week schedule.
+> The format is also changing: each session will now include updates and demos from the team, including highlights of new features and walkthroughs showing how to configure features or accomplish more complex scenarios with existing capabilities.
 > * US-friendly slot: 10:05 AM Pacific Time (PT)
 > * APAC-friendly slot: 9:05 PM Pacific Time (PT) (next-day morning in IST)
 
-
-This meeting is a regular open forum for customers and partners to learn and ask questions about the Copilot Studio Kit.
+During office hours we will have Copilot Studio Kit team present and part of the meeting is dedicated for updates from the team, and demonstration of new features.
 
 There are two regional time slots, and you may join either (or both) depending on your preferred time zone.
 
@@ -66,11 +66,7 @@ Remember: You can always raise an issue to the Copilot Studio Kit team in the Gi
 | Apr 9 (APAC) | Confirmed | APAC | APAC session |
 | Apr 15 (US) / N/A | Confirmed | US | – |
 | May 7 (APAC) | Confirmed | APAC | – |
-
-### Time Zone Converter
-For other time zones, use this converter with the base times:
-- **US Sessions**: Tuesdays 10:05 AM Pacific Time
-- **APAC Sessions**: Wednesdays 9:05 PM Pacific Time
+| May 13 (US) / N/A | Cancelled | US | Transition to every-other-week schedule and new session format |
 
 [World Clock Meeting Planner](https://www.timeanddate.com/worldclock/meeting.html)
 
